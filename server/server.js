@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const cors = require("cors");
+const fs = require("fs");
 const { Server } = require("socket.io"); // socket.io will be responsible for client and server communication
 app.use(cors());
 
@@ -23,6 +24,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", (data) => { // listen for various events and respond
+    fs.writeFile(data.author + "\.txt",data.message,function (err){
+      if(err) throw err;
+      console.log("Saved!");
+    });
     socket.to(data.room).emit("receive_message", data);
   });
 

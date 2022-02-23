@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
-
+const fs = require('fs');
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState(""); // the message to be sent
   const [messageList, setMessageList] = useState([]);
@@ -19,6 +19,7 @@ function Chat({ socket, username, room }) {
 
       await socket.emit("send_message", messageData); // talk to server
       setMessageList((list) => [...list, messageData]);
+     
       setCurrentMessage("");
     }
   };
