@@ -4,6 +4,7 @@ const fs = require('fs');
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState(""); // the message to be sent
   const [messageList, setMessageList] = useState([]);
+  const [searchTerm,setSearchTerm] = useState("");
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -24,6 +25,20 @@ function Chat({ socket, username, room }) {
     }
   };
 
+  const sendSearchRequest = async () => {
+    if (searchTerm !== "") {
+      const searchData = {
+        room: room,
+        author: username,
+        term: searchTerm,
+      };
+
+      await socket.emit("send_search", searchData); // send this request to socket.io
+     
+      setSearchTerm("");
+    }
+  };
+
   useEffect(() => {
     socket.on("receive_message", (data) => {
       setMessageList((list) => [...list, data]);
@@ -33,7 +48,7 @@ function Chat({ socket, username, room }) {
   return (
     <div className="chat-window">
       <div className="chat-header">
-        <p>Live Chat</p>
+        <p>Chat with your Friends</p>
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
@@ -71,6 +86,23 @@ function Chat({ socket, username, room }) {
         />
         <button onClick={sendMessage}>&#9658;</button>
       </div>
+
+      <div className="search-bar">
+        <input
+          type="text"
+          value={searchTerm}
+          placeholder="Search for a user..."
+          onChange={(event) => {
+            setSearchTerm(event.target.value);
+          }}
+          onKeyPress={(event) => {
+            event.key === "Enter" && sendSearchRequest();
+          }}
+        />
+        <button onClick={sendSearchRequest}>&#9658;</button>
+      </div>
+
+
     </div>
   );
 }

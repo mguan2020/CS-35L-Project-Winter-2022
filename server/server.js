@@ -3,6 +3,7 @@ const app = express();
 const http = require("http");
 const cors = require("cors");
 const fs = require("fs");
+const readline = require('readline');
 const { Server } = require("socket.io"); // socket.io will be responsible for client and server communication
 app.use(cors());
 
@@ -24,11 +25,36 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", (data) => { // listen for various events and respond
-    fs.writeFile(data.author + "\.txt",data.message,function (err){
+    fs.appendFile(data.author + "\.txt",data.message + '\n',function (err){
       if(err) throw err;
       console.log("Saved!");
     });
     socket.to(data.room).emit("receive_message", data);
+  });
+
+  socket.on("send_search", (data) => { // process the search request
+    let filepath = data.term + "\.txt";
+    try{
+      if(fs.existsSync(filepath)){
+        console.log("Good");
+        const file = readline.createInterface({
+          input: fs.createReadStream(filepath),
+          output: process.stdout,
+          terminal: false
+      });
+
+      file.on('line', (line) => {
+        console.log(line);
+    });
+      }
+       else{
+         console.log("Cannot find information for " + data.term);
+       }
+      }
+    
+    catch(err){ // file not found
+      console.log("An exception has occurred.");
+    }
   });
 
   socket.on("disconnect", () => {
