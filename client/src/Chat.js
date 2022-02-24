@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
+import { Socket } from "socket.io-client";
+import "./Chat.css";
+import SearchResult from "./SearchResult";
 const fs = require('fs');
+const readline = require('readline');
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState(""); // the message to be sent
   const [messageList, setMessageList] = useState([]);
   const [searchTerm,setSearchTerm] = useState("");
-
+  const [messageR, setMessageR] = useState([]); // messages to be displayed
   const sendMessage = async () => {
     if (currentMessage !== "") {
       const messageData = {
@@ -25,24 +29,39 @@ function Chat({ socket, username, room }) {
     }
   };
 
-  const sendSearchRequest = async () => {
+  socket.on("search_response",(list)=>{
+       console.log("Hooray!");
+       console.log(list);
+       setMessageR(list);
+       console.log(list.length);
+  });
+
+
+
+
+  
+
+ const sendSearchRequest = async () => {
     if (searchTerm !== "") {
       const searchData = {
         room: room,
         author: username,
         term: searchTerm,
       };
-
+      console.log("x");
       await socket.emit("send_search", searchData); // send this request to socket.io
-     
-      setSearchTerm("");
-    }
-  };
+  
+    setSearchTerm("");
+  }
+}
+  
+
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
       setMessageList((list) => [...list, data]);
     });
+
   }, [socket]);
 
   return (
@@ -91,7 +110,7 @@ function Chat({ socket, username, room }) {
         <input
           type="text"
           value={searchTerm}
-          placeholder="Search for a user..."
+          placeholder="Search for a keyword..."
           onChange={(event) => {
             setSearchTerm(event.target.value);
           }}
@@ -99,8 +118,11 @@ function Chat({ socket, username, room }) {
             event.key === "Enter" && sendSearchRequest();
           }}
         />
-        <button onClick={sendSearchRequest}>&#9658;</button>
+        
+         <button onClick={sendSearchRequest}>&#9658;</button>
       </div>
+
+      <SearchResult list={messageR}/>
 
 
     </div>

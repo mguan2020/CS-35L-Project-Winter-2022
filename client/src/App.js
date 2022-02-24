@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import { useState } from "react";
 import Chat from "./Chat";
 
+
 const socket = io.connect("http://localhost:3001"); // connect our frontend with backend
 
 function App() {
@@ -41,6 +42,8 @@ function App() {
             }}
           />
           <button onClick={joinRoom}>Join A Room </button> </div>
+          
+          
     </div>);
   }
 
