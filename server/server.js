@@ -51,14 +51,12 @@ io.on("connection", (socket) => {
 
         file.on('line', (line) => {
           console.log(line);
-        if(line.indexOf(data.term) != -1){
-          console.log("Pushed");
+        if(line.split(" ").includes(data.term)){
           list.push(line);
         }    
       });
         const sleep = promisify(setTimeout);
         sleep(500).then(()=>{
-          console.log("List length: " + list.length);
           socket.emit("search_response",list); // send the list of relevant messages back to the client
         });
       }

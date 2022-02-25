@@ -9,7 +9,9 @@ function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState(""); // the message to be sent
   const [messageList, setMessageList] = useState([]);
   const [searchTerm,setSearchTerm] = useState("");
+  const [finalSearchTerm,setfinalSearchTerm] = useState("");
   const [messageR, setMessageR] = useState([]); // messages to be displayed
+  const [isSearching, setisSearching] = useState(false);
   const sendMessage = async () => {
     if (currentMessage !== "") {
       const messageData = {
@@ -50,10 +52,15 @@ function Chat({ socket, username, room }) {
       };
       console.log("x");
       await socket.emit("send_search", searchData); // send this request to socket.io
-  
+    setfinalSearchTerm(searchTerm);
     setSearchTerm("");
+    setisSearching(true);
   }
 }
+  
+  const clearSearchResults = async()=> {
+       setisSearching(false);
+  }
   
 
 
@@ -122,11 +129,12 @@ function Chat({ socket, username, room }) {
          <button onClick={sendSearchRequest}>&#9658;</button>
       </div>
 
-      <SearchResult list={messageR}/>
-
+      <SearchResult list={messageR} term={finalSearchTerm} search={isSearching}/>
+       <button onClick={clearSearchResults}>Clear Results</button>
 
     </div>
   );
 }
+
 
 export default Chat;
