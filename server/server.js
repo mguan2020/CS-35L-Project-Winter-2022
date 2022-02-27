@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", (data) => { // listen for various events and respond
-    fs.appendFile(data.author + "\.txt",data.message + '\n',function (err){
+    fs.appendFile(data.author + "\.txt",data.message + " (posted at time: " + data.time + ')\n',function (err){
       if(err) throw err;
       console.log("Saved!");
     });
@@ -51,7 +51,7 @@ io.on("connection", (socket) => {
 
         file.on('line', (line) => {
           console.log(line);
-        if(line.split(" ").includes(data.term)){
+        if(line.substring(0,line.lastIndexOf(" (post")).split(" ").includes(data.term)){
           list.push(line);
         }    
       });
