@@ -5,6 +5,7 @@ import "./Chat.css";
 import SearchResult from "./SearchResult";
 const fs = require('fs');
 const readline = require('readline');
+
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState(""); // the message to be sent
   const [messageList, setMessageList] = useState([]);
@@ -38,11 +39,6 @@ function Chat({ socket, username, room }) {
        console.log(list.length);
   });
 
-
-
-
-  
-
  const sendSearchRequest = async () => {
     if (searchTerm !== "") {
       const searchData = {
@@ -73,8 +69,24 @@ function Chat({ socket, username, room }) {
 
   return (
     <div className="chat-window">
-      <div className="chat-header">
-        <p>Chat with your Friends</p>
+          <div className="chat-header">
+              <p className= "header"> Chat with your Friends </p>
+              <div className="search-bar">
+                  <input
+                      className="bar"
+                      type="text"
+                      value={searchTerm}
+                      placeholder="Search for a keyword..."
+                      onChange={(event) => {
+                          setSearchTerm(event.target.value);
+                      }}
+                      onKeyPress={(event) => {
+                          event.key === "Enter" && sendSearchRequest();
+                      }}
+                  />
+                  <button onClick={sendSearchRequest}>Find</button>
+                  <button onClick={clearSearchResults}>Clear Results</button>
+              </div>
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
@@ -102,7 +114,7 @@ function Chat({ socket, username, room }) {
         <input
           type="text"
           value={currentMessage}
-          placeholder="Hey..."
+          placeholder="Enter Your Message..."
           onChange={(event) => {
             setCurrentMessage(event.target.value);
           }}
@@ -110,27 +122,11 @@ function Chat({ socket, username, room }) {
             event.key === "Enter" && sendMessage();
           }}
         />
-        <button onClick={sendMessage}>&#9658;</button>
-      </div>
-
-      <div className="search-bar">
-        <input
-          type="text"
-          value={searchTerm}
-          placeholder="Search for a keyword..."
-          onChange={(event) => {
-            setSearchTerm(event.target.value);
-          }}
-          onKeyPress={(event) => {
-            event.key === "Enter" && sendSearchRequest();
-          }}
-        />
-        
-         <button onClick={sendSearchRequest}>&#9658;</button>
+        <button onClick={sendMessage}>Send</button>
       </div>
 
       <SearchResult list={messageR} term={finalSearchTerm} search={isSearching}/>
-       <button onClick={clearSearchResults}>Clear Results</button>
+
 
     </div>
   );
