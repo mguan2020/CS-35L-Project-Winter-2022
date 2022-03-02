@@ -1,6 +1,7 @@
 import "./App.css";
 import JoinChat from "./JoinChat";
 import Sidebar from "./Sidebar";
+import Register from "./Register";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
                 <JoinChat />
             </div>
             <div className="right">
+                <Register />
             </div>
         </div>
     );

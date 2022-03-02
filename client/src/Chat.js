@@ -33,7 +33,6 @@ function Chat({ socket, username, room }) {
   };
 
   socket.on("search_response",(list)=>{
-       console.log("Hooray!");
        console.log(list);
        setMessageR(list);
        console.log(list.length);
@@ -57,8 +56,6 @@ function Chat({ socket, username, room }) {
   const clearSearchResults = async()=> {
        setisSearching(false);
   }
-  
-
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
@@ -125,10 +122,11 @@ function Chat({ socket, username, room }) {
         <button onClick={sendMessage}>Send</button>
       </div>
 
+      <input type="button" value="Reload Page" onClick={room=""}></input>
+
       <SearchResult list={messageR} term={finalSearchTerm} search={isSearching}/>
-
-
     </div>
+    
   );
 }
 

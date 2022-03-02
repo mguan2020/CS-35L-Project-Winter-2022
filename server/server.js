@@ -9,8 +9,8 @@ const { promisify } = require('util')
 const { Server } = require("socket.io"); // socket.io will be responsible for client and server communication
 
 app.use(cors());
+app.use(express.json());
 
-let userList = [];
 const server = http.createServer(app);
 
 const io = new Server(server, { // connect express to socket.io server
@@ -23,13 +23,57 @@ const io = new Server(server, { // connect express to socket.io server
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`); // who connected to the message app
   
+  socket.on("register", (user, pass) => {
+    let filepath = 'accounts/' + user + "\.txt";
+    if(fs.existsSync(filepath)){
+      console.log("Username already exists!")
+    }
+    else {
+      socket.emit("valid_register", user);
+      fs.appendFile(filepath,"Password: " + pass + "\n" + 
+        "Friends: " + "\n",function (err){
+      if(err) throw err;
+      console.log("Saved!");
+      });
+    }
+  });
+
+  socket.on("login", (user, pass) => {
+    console.log(`Attempted login with id: ${user}`);
+
+    let filepath = 'accounts/' + user + "\.txt";
+    
+    if(fs.existsSync(filepath)){
+      // console.log("valid username!");
+
+      let passLine = "Password: " + pass;
+      const file = fs.readFileSync(filepath, 'UTF-8');
+
+      const line = file.split(/\r?\n/);
+      if (line[0] == passLine)
+      {
+        /////// SEND VALID LOGIN DATA \\\\\\
+        console.log("valid login!");
+        socket.emit("valid_login", user);
+      }
+      else{
+        console.log("invalid Password!");
+        socket.emit("invalid_password");
+      }
+    }
+    else{
+      console.log("invalid username");
+    }
+
+  });
+
   socket.on("join_room", (data) => {
     socket.join(data);
     console.log(`User with id: ${socket.id} joined room: ${data}`);
   });
 
   socket.on("send_message", (data) => { // listen for various events and respond
-    fs.appendFile(data.author + "\.txt",data.message + " (posted at time: " + data.time + ')\n',function (err){
+    fs.appendFile("rooms/" + data.author + "\.txt",data.message + " (posted at time: " + data.time + ')\n',function (err){
       if(err) throw err;
       console.log("Saved!");
     });
@@ -37,7 +81,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_search", (data) => { // process the search request
-    let filepath = data.author + "\.txt";
+    let filepath = "rooms/" + data.author + "\.txt";
     console.log(filepath);
     let list = [];
     
@@ -68,7 +112,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log(`User with id: ${socket.id} left room: ${data}`);
+    console.log(`User with id: ${socket.id} left`);
   });
 });
 
