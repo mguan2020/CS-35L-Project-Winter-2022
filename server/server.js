@@ -20,6 +20,40 @@ const io = new Server(server, { // connect express to socket.io server
   },
 });
 
+function getInitialMsg(room){
+    let filepath = "rooms/" + room + "\.txt";
+    console.log(filepath);
+    let list = [];
+    
+      if(fs.existsSync(filepath)){
+        console.log("Good");
+        const file = readline.createInterface({
+          input: fs.createReadStream(filepath),
+          output: process.stdout,
+          terminal: false
+      });
+         
+        file.on('line', (line) => {
+          console.log(line);
+          let m = line.substring(0,line.lastIndexOf("(posted by"));
+          let a = line.substring(line.lastIndexOf("by:") + 3, line.lastIndexOf(" (posted at time"));
+          let t = line.substring(line.lastIndexOf("time: ") + 6, line.lastIndexOf(")"));
+          let combined = {room: room, author: a, message: m, time: t};
+          list.push(combined);
+      });
+      const sleep = promisify(setTimeout);
+        sleep(500).then(()=>{
+          return list;
+        });
+         
+     
+      }
+
+      else{
+         return list;
+       }
+}
+
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`); // who connected to the message app
   
@@ -40,6 +74,37 @@ io.on("connection", (socket) => {
   /*socket.on("send_like",(data)=>{
        socket.to(data.room).emit("receive_like",data);
   });*/
+
+  socket.on("get_data",(room)=>{
+    console.log("Rec");
+    
+    let filepath = "rooms/" + room + "\.txt";
+    console.log(filepath);
+    let list = [];
+    
+      if(fs.existsSync(filepath)){
+        console.log("Good");
+        const file = readline.createInterface({
+          input: fs.createReadStream(filepath),
+          output: process.stdout,
+          terminal: false
+      });
+         
+        file.on('line', (line) => {
+          console.log(line);
+          let m = line.substring(0,line.lastIndexOf("(posted by"));
+          let a = line.substring(line.lastIndexOf("by:") + 3, line.lastIndexOf(" (posted at time"));
+          let t = line.substring(line.lastIndexOf("time: ") + 6, line.lastIndexOf(")"));
+          let combined = {room: room, author: a, message: m, time: t};
+          list.push(combined);
+      });
+
+    const sleep = promisify(setTimeout);
+    sleep(1000).then(()=>{
+      socket.emit("receive_data",list);
+    });
+   
+    }});
 
   socket.on("login", (user, pass) => {
     console.log(`Attempted login with id: ${user}`);

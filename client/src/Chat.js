@@ -4,6 +4,7 @@ import { Socket } from "socket.io-client";
 import "./Chat.css";
 import SearchResult from "./SearchResult";
 import {getRoom} from "./JoinChat";
+
 const fs = require('fs');
 const readline = require('readline');
 
@@ -18,7 +19,7 @@ function Chat({ socket, username, room }) {
  // const [numLikes,setnumLikes] = useState([]);
   const sendMessage = async () => {
     if (currentMessage !== "") {
-      console.log(getRoom() + "y");
+      console.log(room + "y");
       console.log(socket + "y");
       console.log(username + "y");
       const messageData = {
@@ -44,7 +45,8 @@ function Chat({ socket, username, room }) {
        setMessageR(list);
        console.log(list.length);
   });
-
+   
+  
   
 
  const sendSearchRequest = async () => {
@@ -72,6 +74,16 @@ function Chat({ socket, username, room }) {
         }
       }
 });*/
+socket.on("receive_data",(data)=>{
+    console.log("Y");
+
+    setMessageList(data);
+    console.log(data);
+});
+function update(){
+ 
+  socket.emit("get_data",getRoom());
+}
 
   
   const clearSearchResults = async()=> {
@@ -153,7 +165,8 @@ function Chat({ socket, username, room }) {
         <button onClick={sendMessage}>Send</button>
       </div>
 
-      <input type="button" value="Reload Page" onClick={room=""}></input>
+      <input type="button" value="Reload Page" onClick={ro=""}></input>
+      <input type="button" value="Reload Pag" onClick={update}></input>
 
       <SearchResult list={messageR} term={finalSearchTerm} search={isSearching}/>
     </div>
