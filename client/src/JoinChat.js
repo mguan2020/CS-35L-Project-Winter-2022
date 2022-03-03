@@ -9,7 +9,7 @@ import {passUser} from "./Register"
 const socket = io.connect("http://localhost:3001"); // connect our frontend with backend
 const x = 1;
 let username = "aa";
- var r = "bbb";
+ var r = "aaa";
 
 
 export function getRoom() {
@@ -24,11 +24,14 @@ function JoinChat() {
     username = passUser();
     console.log("joinROOM! -> Username: " + username);
     console.log("joinROOM! -> Username: " + room);
+    r = room;
     if (username !== "" && room !== "") {
       socket.emit("join_room", room); // send the user to a chatroom
       setShowChat(true);
     }   
   };
+
+  
 
   // const updateValues = () => {
   //   setUsername(passUser());
