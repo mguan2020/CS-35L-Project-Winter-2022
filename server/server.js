@@ -37,6 +37,9 @@ io.on("connection", (socket) => {
       });
     }
   });
+  /*socket.on("send_like",(data)=>{
+       socket.to(data.room).emit("receive_like",data);
+  });*/
 
   socket.on("login", (user, pass) => {
     console.log(`Attempted login with id: ${user}`);
@@ -73,7 +76,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", (data) => { // listen for various events and respond
-    fs.appendFile("rooms/" + data.author + "\.txt",data.message + " (posted at time: " + data.time + ')\n',function (err){
+    console.log(data.room + "aaa");
+    fs.appendFile("rooms/" + data.room + "\.txt",data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')\n',function (err){
       if(err) throw err;
       console.log("Saved!");
     });
@@ -81,7 +85,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_search", (data) => { // process the search request
-    let filepath = "rooms/" + data.author + "\.txt";
+    let filepath = "rooms/" + data.room + "\.txt";
     console.log(filepath);
     let list = [];
     
@@ -95,7 +99,7 @@ io.on("connection", (socket) => {
 
         file.on('line', (line) => {
           console.log(line);
-        if(line.substring(0,line.lastIndexOf(" (post")).split(" ").includes(data.term)){
+        if(line.substring(0,line.lastIndexOf("(posted by")).split(" ").includes(data.term)){
           list.push(line);
         }    
       });
