@@ -165,8 +165,8 @@ function update(){
         <button onClick={sendMessage}>Send</button>
       </div>
 
-      <input type="button" value="Reload Page" onClick={ro=""}></input>
-      <input type="button" value="Reload Pag" onClick={update}></input>
+      <input type="button" value="Reload Page" onClick={room=""}></input>
+      <input type="button" value="Get Past Conversations" onClick={update}></input>
 
       <SearchResult list={messageR} term={finalSearchTerm} search={isSearching}/>
     </div>
