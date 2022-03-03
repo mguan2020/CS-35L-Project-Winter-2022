@@ -9,7 +9,8 @@ import {passUser} from "./Register"
 const socket = io.connect("http://localhost:3001"); // connect our frontend with backend
 const x = 1;
 let username = "aa";
-let r = "aa";
+ var r = "bbb";
+
 
 export function getRoom() {
   return(r);
@@ -56,7 +57,7 @@ function JoinChat() {
 
   if(showChat){
     return (<div className="JoinChat">
-         <Chat socket={socket} username={username} room={r} />
+         <Chat socket={socket} username={username} room={room}/>
     </div>);
   }
   else{
