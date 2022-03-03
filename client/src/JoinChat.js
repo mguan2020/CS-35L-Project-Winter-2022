@@ -7,16 +7,22 @@ import Register from "./Register"
 import {passUser} from "./Register"
 
 const socket = io.connect("http://localhost:3001"); // connect our frontend with backend
-let username = "";
+const x = 1;
+let username = "aa";
+let r = "aa";
+
+export function getRoom() {
+  return(r);
+}
 
 function JoinChat() {
   // const [username, setUsername] = useState(""); // set states of username, room to be empty at first
   const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false); // whether user has joined chat or not
-
   const joinRoom = () => {
     username = passUser();
     console.log("joinROOM! -> Username: " + username);
+    console.log("joinROOM! -> Username: " + room);
     if (username !== "" && room !== "") {
       socket.emit("join_room", room); // send the user to a chatroom
       setShowChat(true);
@@ -50,7 +56,7 @@ function JoinChat() {
 
   if(showChat){
     return (<div className="JoinChat">
-         <Chat socket={socket} username={username} room={room} />
+         <Chat socket={socket} username={username} room={r} />
     </div>);
   }
   else{
@@ -62,6 +68,7 @@ function JoinChat() {
             placeholder="Room ID..."
             onChange={(event) => {
               setRoom(event.target.value);
+              r = event.target.value;
             }}
           />
           <button onClick={joinRoom}>Join A Room </button>

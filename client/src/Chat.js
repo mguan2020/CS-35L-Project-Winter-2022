@@ -3,20 +3,26 @@ import ScrollToBottom from "react-scroll-to-bottom";
 import { Socket } from "socket.io-client";
 import "./Chat.css";
 import SearchResult from "./SearchResult";
+import {getRoom} from "./JoinChat";
 const fs = require('fs');
 const readline = require('readline');
 
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState(""); // the message to be sent
+  //const [messageList, setMessageList] = useState([{room: getRoom(),author:username,message:"hiii",time:"xtime"}]);
   const [messageList, setMessageList] = useState([]);
   const [searchTerm,setSearchTerm] = useState("");
   const [finalSearchTerm,setfinalSearchTerm] = useState("");
   const [messageR, setMessageR] = useState([]); // messages to be displayed
   const [isSearching, setisSearching] = useState(false);
+ // const [numLikes,setnumLikes] = useState([]);
   const sendMessage = async () => {
     if (currentMessage !== "") {
+      console.log(getRoom() + "y");
+      console.log(socket + "y");
+      console.log(username + "y");
       const messageData = {
-        room: room,
+        room: getRoom(),
         author: username,
         message: currentMessage,
         time:
@@ -26,8 +32,9 @@ function Chat({ socket, username, room }) {
       };
 
       await socket.emit("send_message", messageData); // talk to server
+      console.log(messageData.room + "x");
       setMessageList((list) => [...list, messageData]);
-     
+    //  setnumLikes((list) => [...list, 0]);
       setCurrentMessage("");
     }
   };
@@ -38,10 +45,12 @@ function Chat({ socket, username, room }) {
        console.log(list.length);
   });
 
+  
+
  const sendSearchRequest = async () => {
     if (searchTerm !== "") {
       const searchData = {
-        room: room,
+        room: getRoom(),
         author: username,
         term: searchTerm,
       };
@@ -52,6 +61,18 @@ function Chat({ socket, username, room }) {
     setisSearching(true);
   }
 }
+
+/*socket.on("receive_like",(data)=>{
+      for(let i = 0; i < numLikes.length; i++){
+        if(messageList[i].time === data.time){
+          let n = [...numLikes];
+          n[i]++;
+          setnumLikes(n);
+          break;
+        }
+      }
+});*/
+
   
   const clearSearchResults = async()=> {
        setisSearching(false);
@@ -59,7 +80,9 @@ function Chat({ socket, username, room }) {
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
+      console.log("aaa");
       setMessageList((list) => [...list, data]);
+     // setnumLikes((list) => [...list, 0]);
     });
 
   }, [socket]);
@@ -87,12 +110,14 @@ function Chat({ socket, username, room }) {
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
-          {messageList.map((messageContent) => {
+
+
+          {messageList.map((messageContent,i) => {
             return (
               <div
                 className="message"
                 id={username === messageContent.author ? "you" : "other"}
-              >
+              > 
                 <div>
                   <div className="message-content">
                     <p>{messageContent.message}</p>
@@ -100,6 +125,12 @@ function Chat({ socket, username, room }) {
                   <div className="message-meta">
                     <p id="time">{messageContent.time}</p>
                     <p id="author">{messageContent.author}</p>
+                   {/* <button onClick={()=>{
+                      let n = [...numLikes];
+                      n[i]++;
+                      setnumLikes(n);
+                      socket.emit("send_like",messageContent);
+                    }}>{numLikes[i]}</button>*/}
                   </div>
                 </div>
               </div>
