@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Chat from "./Chat";
 import Register from "./Register"
 import {passUser} from "./Register"
-
+import {addData} from "./SidebarData";
 const socket = io.connect("http://localhost:3001"); // connect our frontend with backend
 const x = 1;
 let username = "aa";
@@ -16,17 +16,23 @@ export function getRoom() {
   return(r);
 }
 
+export function getSocket(){
+  return socket;
+}
+
 function JoinChat() {
   // const [username, setUsername] = useState(""); // set states of username, room to be empty at first
   const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false); // whether user has joined chat or not
+  
   const joinRoom = () => {
     username = passUser();
     console.log("joinROOM! -> Username: " + username);
     console.log("joinROOM! -> Username: " + room);
     r = room;
     if (username !== "" && room !== "") {
-      socket.emit("join_room", room); // send the user to a chatroom
+      addData(room);
+      socket.emit("join_room", room,username); // send the user to a chatroom
       setShowChat(true);
     }   
   };

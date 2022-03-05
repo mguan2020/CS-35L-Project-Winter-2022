@@ -26,6 +26,8 @@ function Chat({ socket, username, room }) {
         room: getRoom(),
         author: username,
         message: currentMessage,
+        numLikes: 0,
+        likedby: [],
         time:
           new Date(Date.now()).getHours() +
           ":" +
@@ -99,10 +101,23 @@ function update(){
 
   }, [socket]);
 
+  socket.on("receive_like",(data)=>{
+    console.log("Received");
+     for(let i = 0; i < messageList.length; i++){
+         if (messageList[i].time===data.time){
+           console.log("Okay");
+           let n = [...messageList];
+           n[i].numLikes = data.numLikes;
+           n[i].likedby = data.likedby;
+           setMessageList(n);
+         }
+     }
+  })
+
   return (
     <div className="chat-window">
           <div className="chat-header">
-              <p className= "header"> Chat with your Friends </p>
+              <p className= "header"> Room: {getRoom()} </p>
               <div className="search-bar">
                   <input
                       className="bar"
@@ -137,12 +152,17 @@ function update(){
                   <div className="message-meta">
                     <p id="time">{messageContent.time}</p>
                     <p id="author">{messageContent.author}</p>
-                   {/* <button onClick={()=>{
-                      let n = [...numLikes];
-                      n[i]++;
-                      setnumLikes(n);
-                      socket.emit("send_like",messageContent);
-                    }}>{numLikes[i]}</button>*/}
+                    <p id= "time"> Likes:{messageContent.numLikes}</p>
+
+                   <button onClick={()=>{
+                      if(!messageContent.likedby.includes(username)){
+                      let n = [...messageList];
+                      n[i].numLikes++;
+                      n[i].likedby.push(username);
+                      setMessageList(n);
+                      socket.emit("send_like",messageContent,username);
+                      }
+                    }}>Like</button>
                   </div>
                 </div>
               </div>

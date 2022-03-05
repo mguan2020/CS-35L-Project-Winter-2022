@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const SidebarData = [
+let SidebarData = [
     {
         title: "Group",
         link: "/Group",
@@ -15,3 +15,14 @@ export const SidebarData = [
     }
 ];
 
+
+
+export function getSData(){
+    return SidebarData;
+}
+
+export function addData(titlename){
+    let x = {title: titlename, link: "/" + titlename};
+
+    SidebarData.push(x);
+}

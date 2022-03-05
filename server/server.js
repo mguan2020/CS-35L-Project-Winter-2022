@@ -38,7 +38,10 @@ function getInitialMsg(room){
           let m = line.substring(0,line.lastIndexOf("(posted by"));
           let a = line.substring(line.lastIndexOf("by:") + 3, line.lastIndexOf(" (posted at time"));
           let t = line.substring(line.lastIndexOf("time: ") + 6, line.lastIndexOf(")"));
-          let combined = {room: room, author: a, message: m, time: t};
+          let l = line.substring(line.lastIndexOf(')')+1,line.lastIndexOf(':'));
+          let q = line.substring(line.lastIndexOf(",")+1,line.lastIndexOf("]")-1).split(" ");
+
+          let combined = {room: room, author: a, message: m, time: t, numLikes: parseInt(l),likedby:q};
           list.push(combined);
       });
       const sleep = promisify(setTimeout);
@@ -61,6 +64,7 @@ io.on("connection", (socket) => {
     let filepath = 'accounts/' + user + "\.txt";
     if(fs.existsSync(filepath)){
       console.log("Username already exists!")
+      socket.emit("fail_register",filepath);
     }
     else {
       socket.emit("valid_register", user);
@@ -71,9 +75,31 @@ io.on("connection", (socket) => {
       });
     }
   });
-  /*socket.on("send_like",(data)=>{
-       socket.to(data.room).emit("receive_like",data);
-  });*/
+  socket.on("send_like",(data,uname)=>{
+
+    fs.readFile("rooms/" + data.room + "\.txt", {encoding: 'utf8'}, function (err,dat) {
+      
+      let old = data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')' + (data.numLikes-1) + ':liked by,';
+
+      for(let i = 0; i < data.likedby.length-1; i++){
+        old += data.likedby[i] + " ";
+      }
+      old += "]\n";
+      let ne = data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')' + data.numLikes + ':liked by,';
+      for(let i = 0; i < data.likedby.length; i++){
+        ne += data.likedby[i] + " ";
+      }
+     ne += "]\n";
+      var formatted = dat.replace(old, ne);
+    fs.writeFile("rooms/" + data.room + "\.txt", formatted, 'utf8', function (err) {
+      if (err) return console.log(err);
+     
+      
+   });
+
+  });
+     socket.to(data.room).emit("receive_like",data);
+  });
 
   socket.on("get_data",(room)=>{
     console.log("Rec");
@@ -95,7 +121,11 @@ io.on("connection", (socket) => {
           let m = line.substring(0,line.lastIndexOf("(posted by"));
           let a = line.substring(line.lastIndexOf("by:") + 3, line.lastIndexOf(" (posted at time"));
           let t = line.substring(line.lastIndexOf("time: ") + 6, line.lastIndexOf(")"));
-          let combined = {room: room, author: a, message: m, time: t};
+          let l = line.substring(line.lastIndexOf(')')+1,line.lastIndexOf(':'));
+          let q = line.substring(line.lastIndexOf(",")+1,line.lastIndexOf("]")-1).split(" ");
+
+
+          let combined = {room: room, author: a, message: m, time: t, numLikes: parseInt(l),likedby:q};
           list.push(combined);
       });
 
@@ -131,18 +161,23 @@ io.on("connection", (socket) => {
     }
     else{
       console.log("invalid username");
+      socket.emit("invalid_password");
     }
 
   });
 
-  socket.on("join_room", (data) => {
+  socket.on("join_room", (data,username) => {
     socket.join(data);
+    let filepath = 'accounts/' + username + "\.txt";
+
+    //fs.appendFile(filepath,"Room: " + data); // add room number to file
     console.log(`User with id: ${socket.id} joined room: ${data}`);
   });
 
   socket.on("send_message", (data) => { // listen for various events and respond
     console.log(data.room + "aaa");
-    fs.appendFile("rooms/" + data.room + "\.txt",data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')\n',function (err){
+    let content = data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')' + data.numLikes + ':liked by,]\n';
+    fs.appendFile("rooms/" + data.room + "\.txt",content,function (err){
       if(err) throw err;
       console.log("Saved!");
     });
@@ -165,7 +200,11 @@ io.on("connection", (socket) => {
         file.on('line', (line) => {
           console.log(line);
         if(line.substring(0,line.lastIndexOf("(posted by")).split(" ").includes(data.term)){
-          list.push(line);
+          let m = line.substring(0,line.lastIndexOf("(posted by"));
+          let a = line.substring(line.lastIndexOf("by:") + 3, line.lastIndexOf(" (posted at time"));
+          let t = line.substring(line.lastIndexOf("time: ") + 6, line.lastIndexOf(")"));
+          let toAdd = m + " (posted by: " + a + ") at time: " + t;
+          list.push(toAdd);
         }    
       });
         const sleep = promisify(setTimeout);
