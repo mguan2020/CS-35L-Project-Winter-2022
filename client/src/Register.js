@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import io from "socket.io-client";
 import {getSocket} from "./JoinChat";
 import "./Register.css";
+import Logout from "./Logout";
 
 //const socket = io.connect("http://localhost:3001");
 
@@ -18,6 +19,7 @@ function Register() {
     const [passwordReg, setPasswordReg] = useState("");
     const [usernameLog, setUsernameLog] = useState("");
     const [passwordLog, setPasswordLog] = useState("");
+    const [showLogout, setShowLogout] = useState(false); //used to show logout page
     const [failregister, setfailregister] = useState(false);
     const [faillogin, setfaillogin] = useState(false);
     const [successlogin, setsuccesslogin] = useState(false);
@@ -40,7 +42,8 @@ function Register() {
             setsuccesslogin(true);
             pass_username = usernameLog;
         });
-
+        setShowLogout(true); //set true to display logout page
+        console.log("Going to logout page")
         
         // pass_username = usernameLog;
     };
@@ -57,46 +60,53 @@ function Register() {
         setfaillogin(true);
     });
 
-    return (
-        <div>
-            <div className="registration">
-                <h1>Register</h1>
-                <input type="text" placeholder="Username" value={usernameReg}
-                    onChange={(e) => {
-                        setUsernameReg(e.target.value);
-                    }}
-                />
-               
-                <input type="password" placeholder="Password" value={passwordReg}
-                    onChange={(e) => {
-                        setPasswordReg(e.target.value);
-                    }}
-                />
-                <button onClick={regist}>Register</button>
-                {failregister && <p style={{color:"red"}}>Username already exists!</p>}
-            </div>
-            <div className="login">
-                <h1>Login</h1>
-                <input type="text" placeholder="Username" value={usernameLog}
-                    onChange={(e) => {
-                        setUsernameLog(e.target.value);
-                    }}
-                />
-                <input type="password" placeholder="Password" value={passwordLog}
-                    onChange={(e) => {
-                        setPasswordLog(e.target.value);
-                    }}
-                />
-                <button disabled={successlogin} onClick={login}>Login</button>
-                {faillogin && <p style={{color:"red"}}>Incorrect username or password</p>}
-                {successlogin && <p className="loginmsg" >Login successful</p>}
-                {successlogin && <p className="loginasmsg" >Logged in as: </p>}
-                {successlogin && <p className="user"> {usernameLog} </p>}
-            </div>
+    // if showLogout = false, will show regular registration/login page
+    if (showLogout){
+        return (<div className="Logout">
+            <Logout socket={getSocket()} username={usernameLog}/>
+        </div>)
+    } else {
+        return (
             <div>
+                <div className="registration">
+                    <h1>Register</h1>
+                    <input type="text" placeholder="Username" value={usernameReg}
+                        onChange={(e) => {
+                            setUsernameReg(e.target.value);
+                        }}
+                    />
+                
+                    <input type="password" placeholder="Password" value={passwordReg}
+                        onChange={(e) => {
+                            setPasswordReg(e.target.value);
+                        }}
+                    />
+                    <button onClick={regist}>Register</button>
+                    {failregister && <p style={{color:"red"}}>Username already exists!</p>}
+                </div>
+                <div className="login">
+                    <h1>Login</h1>
+                    <input type="text" placeholder="Username" value={usernameLog}
+                        onChange={(e) => {
+                            setUsernameLog(e.target.value);
+                        }}
+                    />
+                    <input type="password" placeholder="Password" value={passwordLog}
+                        onChange={(e) => {
+                            setPasswordLog(e.target.value);
+                        }}
+                    />
+                    <button disabled={successlogin} onClick={login}>Login</button>
+                    {faillogin && <p style={{color:"red"}}>Incorrect username or password</p>}
+                    {successlogin && <p className="loginmsg" >Login successful</p>}
+                    {successlogin && <p className="loginasmsg" >Logged in as: </p>}
+                    {successlogin && <p className="user"> {usernameLog} </p>}
+                </div>
+                <div>
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default Register;
