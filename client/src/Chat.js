@@ -4,11 +4,13 @@ import { Socket } from "socket.io-client";
 import "./Chat.css";
 import SearchResult from "./SearchResult";
 import {getRoom} from "./JoinChat";
+import JoinChat from "./JoinChat";
+import {rem} from "./JoinChat";
 
 const fs = require('fs');
 const readline = require('readline');
 
-function Chat({ socket, username, room }) {
+function Chat({ socket, username, room}) {
   const [currentMessage, setCurrentMessage] = useState(""); // the message to be sent
   //const [messageList, setMessageList] = useState([{room: getRoom(),author:username,message:"hiii",time:"xtime"}]);
   const [messageList, setMessageList] = useState([]);
@@ -16,6 +18,7 @@ function Chat({ socket, username, room }) {
   const [finalSearchTerm,setfinalSearchTerm] = useState("");
   const [messageR, setMessageR] = useState([]); // messages to be displayed
   const [isSearching, setisSearching] = useState(false);
+  const [display, setdisplay] = useState(true);
  // const [numLikes,setnumLikes] = useState([]);
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -66,6 +69,10 @@ function Chat({ socket, username, room }) {
   }
 }
 
+function dis(){
+  
+}
+
 /*socket.on("receive_like",(data)=>{
       for(let i = 0; i < numLikes.length; i++){
         if(messageList[i].time === data.time){
@@ -82,10 +89,7 @@ socket.on("receive_data",(data)=>{
     setMessageList(data);
     console.log(data);
 });
-function update(){
  
-  socket.emit("get_data",getRoom());
-}
 
   
   const clearSearchResults = async()=> {
@@ -114,7 +118,7 @@ function update(){
      }
   })
 
-  return (
+  return ( (!display) ? (<JoinChat/>) :
     <div className="chat-window">
           <div className="chat-header">
               <p className= "header"> Room: {getRoom()} </p>
@@ -185,8 +189,11 @@ function update(){
         <button onClick={sendMessage}>Send</button>
       </div>
 
-      <input type="button" value="Reload Page" onClick={room=""}></input>
-      <input type="button" value="Get Past Conversations" onClick={update}></input>
+     
+      
+      <input type="button" value="Leave room" onClick={()=>{
+         setdisplay(false);
+      }}></input>
 
       <SearchResult list={messageR} term={finalSearchTerm} search={isSearching}/>
     </div>

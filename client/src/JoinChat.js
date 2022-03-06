@@ -33,9 +33,12 @@ function JoinChat() {
     if (username !== "" && room !== "") {
       addData(room);
       socket.emit("join_room", room,username); // send the user to a chatroom
+       
       setShowChat(true);
+      socket.emit("get_data",getRoom());
     }   
   };
+
 
   
 
@@ -66,6 +69,7 @@ function JoinChat() {
 
   if(showChat){
     return (<div className="JoinChat">
+      
          <Chat socket={socket} username={username} room={room}/>
     </div>);
   }
