@@ -18,16 +18,15 @@ function Register() {
     const [passwordReg, setPasswordReg] = useState("");
     const [usernameLog, setUsernameLog] = useState("");
     const [passwordLog, setPasswordLog] = useState("");
-    const[failregister, setfailregister] = useState(false);
+    const [failregister, setfailregister] = useState(false);
     const [faillogin, setfaillogin] = useState(false);
     const [successlogin, setsuccesslogin] = useState(false);
+
 
     const regist = () => {
         getSocket().emit("register",
         usernameReg, 
         passwordReg);
-
-       
     };
 
     const login = () => {
@@ -62,13 +61,13 @@ function Register() {
         <div>
             <div className="registration">
                 <h1>Register</h1>
-                <input type="text" placeholder="Username" 
+                <input type="text" placeholder="Username" value={usernameReg}
                     onChange={(e) => {
                         setUsernameReg(e.target.value);
                     }}
                 />
                
-                <input type="password" placeholder="Password" 
+                <input type="password" placeholder="Password" value={passwordReg}
                     onChange={(e) => {
                         setPasswordReg(e.target.value);
                     }}
@@ -78,19 +77,21 @@ function Register() {
             </div>
             <div className="login">
                 <h1>Login</h1>
-                <input type="text" placeholder="Username" 
+                <input type="text" placeholder="Username" value={usernameLog}
                     onChange={(e) => {
                         setUsernameLog(e.target.value);
                     }}
                 />
-                <input type="password" placeholder="Password" 
+                <input type="password" placeholder="Password" value={passwordLog}
                     onChange={(e) => {
                         setPasswordLog(e.target.value);
                     }}
                 />
                 <button disabled={successlogin} onClick={login}>Login</button>
                 {faillogin && <p style={{color:"red"}}>Incorrect username or password</p>}
-                {successlogin && <p style={{color:"green"}}>Login successful</p>}
+                {successlogin && <p className="loginmsg" >Login successful</p>}
+                {successlogin && <p className="loginasmsg" >Logged in as: </p>}
+                {successlogin && <p className="user"> {usernameLog} </p>}
             </div>
             <div>
             </div>
