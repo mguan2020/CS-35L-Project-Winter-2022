@@ -5,6 +5,7 @@ import "./Chat.css";
 import SearchResult from "./SearchResult";
 import {getRoom} from "./JoinChat";
 import JoinChat from "./JoinChat";
+import Heart from "react-animated-heart";
 import {rem} from "./JoinChat";
 
 const fs = require('fs');
@@ -152,21 +153,23 @@ socket.on("receive_data",(data)=>{
                 <div>
                   <div className="message-content">
                     <p>{messageContent.message}</p>
+                    <Heart isClick={messageContent.numLikes > 0} onClick={()=>{
+                      if(username != messageContent.author && !messageContent.likedby.includes(username)){
+                        let n = [...messageList];
+                        n[i].numLikes++;
+                        n[i].likedby.push(username);
+                        setMessageList(n);
+                        socket.emit("send_like",messageContent,username);
+                        }
+                    }}/>
                   </div>
                   <div className="message-meta">
                     <p id="time">{messageContent.time}</p>
                     <p id="author">{messageContent.author}</p>
                     <p id= "time"> Likes:{messageContent.numLikes}</p>
 
-                   <button onClick={()=>{
-                      if(!messageContent.likedby.includes(username)){
-                      let n = [...messageList];
-                      n[i].numLikes++;
-                      n[i].likedby.push(username);
-                      setMessageList(n);
-                      socket.emit("send_like",messageContent,username);
-                      }
-                    }}>Like</button>
+                 
+
                   </div>
                 </div>
               </div>
