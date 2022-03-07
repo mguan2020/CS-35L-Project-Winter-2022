@@ -28,26 +28,23 @@ function JoinChat() {
   const [showProfile, setShowProfile] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const joinRoom = () => {
-    username = passUser();
-    console.log("joinROOM! -> Username: " + username);
-    console.log("joinROOM! -> Room: " + room);
-    r = room;
-    if (username !== "" && room !== "") {
-      addData(room);
-      socket.emit("join_room", room,username); // send the user to a chatroom
-       
-      setShowChat(true);
-      socket.emit("get_data",getRoom());
-    }   
-  };
+  // const showUserProfile = () => {
+  //   username = passUser();
+  //   setShowChat(false);
+  //   setShowProfile(true);
+  //   socket.emit("show_friends", (username))
+  // };
 
-  const showUserProfile = () => {
-    username = passUser();
+  socket.on("profile_showing", () => {
     setShowChat(false);
     setShowProfile(true);
-    socket.emit("show_friends", (username))
-  };
+  });
+
+  socket.on("stop", () => {
+    setLoggedIn(true);
+    setShowProfile(false);
+    setShowChat(false);
+  });
 
   socket.on("return_home", () => {
     setShowProfile(false);
@@ -65,6 +62,20 @@ function JoinChat() {
     setShowProfile(false);
     setShowChat(false);
   });
+
+  const joinRoom = () => {
+    username = passUser();
+    console.log("joinROOM! -> Username: " + username);
+    console.log("joinROOM! -> Room: " + room);
+    r = room;
+    if (loggedIn != false && room !== "") {
+      addData(room);
+      socket.emit("join_room", room,username); // send the user to a chatroom
+       
+      setShowChat(true);
+      socket.emit("get_data",getRoom());
+    }
+  };
 
   let errmsg = "";
   if(room == "")
@@ -93,7 +104,7 @@ function JoinChat() {
   if(showProfile){
     return (<div className="UserProfile">
       
-         <UserProfile socket={socket} username={username}/>
+         <UserProfile username={username}/>
     </div>);
   }
 
@@ -110,7 +121,6 @@ function JoinChat() {
             }}
           />
           <button onClick={joinRoom}>Join A Room </button>
-          <button onClick={showUserProfile}>Show My Profile</button>
           {/* <button onClick={updateValues}>Update Username </button> */}
            </div>
           <div>

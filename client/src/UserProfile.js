@@ -5,7 +5,7 @@ import {getSocket} from "./JoinChat";
 import JoinChat from "./JoinChat";
 
 
-function UserProfile({socket, username}){
+function UserProfile({username}){
     const [fList, setFList] = useState([]); 
     const returnHome = () => {
         getSocket().emit("stop_profile")
@@ -18,10 +18,11 @@ function UserProfile({socket, username}){
     return (
         <div className="Profile">
             <div className="profilecontainer">
-                <h3>{username}'s Account</h3>
-                <p>Friends: </p>
+                <h3>{username}'s Profile</h3>
+                <br></br>
+                <p>Following:
                 <h3>{fList}</h3>
-                <button onClick={()=>{returnHome()}}>Return to home page</button>
+                </p>
             </div>
         </div>
     );

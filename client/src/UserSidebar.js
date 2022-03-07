@@ -40,7 +40,7 @@ function UserSidebar(){
     ]);
 
     // when user logs out, sidebar will not display friends and chatrooms
-    getSocket().on("stop", ()=>{
+    getSocket().on("logged_out", ()=>{
         setdisplay(false);
     });
 

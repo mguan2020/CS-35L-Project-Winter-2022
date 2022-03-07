@@ -121,9 +121,10 @@ socket.on("receive_data",(data)=>{
      }
   });
 
-  socket.on("stop",()=>{
-      setdisplay(false);
-  });
+  const leaveRoom = () => {
+    socket.emit("stop_chat");
+    setdisplay(false);
+  }
 
   return ( (!display) ? (<JoinChat/>) :
     <div className="chat-window">
@@ -202,9 +203,7 @@ socket.on("receive_data",(data)=>{
 
      
       
-      <input type="button" value="Leave room" onClick={()=>{
-         setdisplay(false);
-      }}></input>
+      <input type="button" value="Leave room" onClick={leaveRoom}></input>
 
       <SearchResult list={messageR} term={finalSearchTerm} search={isSearching}/>
     </div>

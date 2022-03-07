@@ -129,7 +129,7 @@ io.on("connection", (socket) => {
       socket.emit("stop");
   });
 
-  socket.on("log_out",()=>{
+  socket.on("log_out",(user)=>{
     socket.emit("logged_out");
   });
 
@@ -138,6 +138,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("show_friends", (user) => {
+    socket.emit("profile_showing");
     let filepath = 'accounts/' + user + "\.txt";
     let friend_list = []
     
@@ -151,7 +152,6 @@ io.on("connection", (socket) => {
         friend_list.push(lines[i] + "\n");
       }
     }
-    console.log(friend_list)
     socket.emit("friend_list", friend_list);
   });
 
@@ -239,7 +239,7 @@ io.on("connection", (socket) => {
         /////// SEND VALID LOGIN DATA \\\\\\
         console.log("valid login!");
         socket.emit("valid_login", user);
-        socket.emit("logged_in", user)
+        socket.emit("logged_in", user);
       }
       else{
         console.log("invalid Password!");

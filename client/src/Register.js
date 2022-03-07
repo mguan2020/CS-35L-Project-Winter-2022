@@ -25,6 +25,7 @@ function Register() {
     const [showLogout, setShowLogout] = useState(false); //used to show logout page
     const [failregister, setfailregister] = useState(false);
     const [faillogin, setfaillogin] = useState(false);
+    const [successreg, setsuccessreg] = useState(false);
     const [successlogin, setsuccesslogin] = useState(false);
 
     const hash_pass = (pass) => {
@@ -40,6 +41,9 @@ function Register() {
         getSocket().emit("register",
         usernameReg, 
         String(hash_pass(passwordReg)));
+        getSocket().on("valid_register", (user) => {
+            setsuccessreg(true);
+        })
     };
 
     const login = () => {
@@ -60,7 +64,7 @@ function Register() {
     };
 
     // Code to prevent caching of credentials
-    getSocket().on("stop",()=>{
+    getSocket().on("logged_out",()=>{
         pass_username = "";
     });
 
@@ -99,6 +103,7 @@ function Register() {
                     />
                     <button onClick={regist}>Register</button>
                     {failregister && <p style={{color:"red"}}>Username already exists!</p>}
+                    {successreg && <p style={{color:"green"}}>Account registered!</p>}
                 </div>
                 <div className="login">
                     <h1>Login</h1>
