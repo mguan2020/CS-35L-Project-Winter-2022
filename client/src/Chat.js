@@ -8,6 +8,7 @@ import JoinChat from "./JoinChat";
 import Heart from "react-animated-heart";
 import {rem} from "./JoinChat";
 
+
 const fs = require('fs');
 const readline = require('readline');
 
@@ -117,7 +118,11 @@ socket.on("receive_data",(data)=>{
            setMessageList(n);
          }
      }
-  })
+  });
+
+  socket.on("stop",()=>{
+      setdisplay(false);
+  });
 
   return ( (!display) ? (<JoinChat/>) :
     <div className="chat-window">

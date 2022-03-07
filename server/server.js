@@ -75,11 +75,17 @@ io.on("connection", (socket) => {
       });
     }
   });
+
+  socket.on("stop_chat",()=>{
+      socket.emit("stop");
+  });
   socket.on("send_like",(data,uname)=>{
 
     fs.readFile("rooms/" + data.room + "\.txt", {encoding: 'utf8'}, function (err,dat) {
       
       let old = data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')' + (data.numLikes-1) + ':liked by,';
+      console.log(data.likedby[0]);
+      console.log(data.likedby[1]);
 
       for(let i = 0; i < data.likedby.length-1; i++){
         old += data.likedby[i] + " ";
