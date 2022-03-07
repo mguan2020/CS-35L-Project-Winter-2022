@@ -9,6 +9,7 @@ import {getSocket} from "./JoinChat"
 function Sidebar() {
     const [showSidebar, setShowSidebar] = useState(false);
     let username = "";
+    
     // check if user is logged in
     getSocket().on("logged_in", (arg)=>{
         setShowSidebar(true);
@@ -18,7 +19,7 @@ function Sidebar() {
     //if logged in, show friends and chatrooms, otherwise don't
     if (showSidebar){
         return (<div className="UserSidebar">
-            <UserSidebar username={username}/>
+            <UserSidebar/>
         </div>)
     } else {
         return (

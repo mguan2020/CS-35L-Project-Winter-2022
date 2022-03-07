@@ -2,10 +2,14 @@ import Sidebar from "./Sidebar";
 import "./UserSidebar.css"
 import React, { useEffect, useState } from "react";
 import {getSocket} from "./JoinChat";
+import {passUser} from "./Register"
 
-function Logout({username}){
+function UserSidebar(){
     const [display, setdisplay] = useState(true);
-
+    const [friend_username, setFriendUsername] = useState("");
+    const [failfriend, setFailFriend] = useState(false);
+    const [savedfriend, setSavedFriend] = useState(false);
+    const [existsfriend, setExistsFriend] = useState(false);
     const [d,setd] = useState([
         {
             title: "Group",
@@ -38,15 +42,28 @@ function Logout({username}){
     // when user logs out, sidebar will not display friends and chatrooms
     getSocket().on("stop", ()=>{
         setdisplay(false);
-    })
+    });
+
+    getSocket().on("invalid_friend", ()=>{
+        setFailFriend(true);
+    });
+
+    getSocket().on("saved_friend", ()=>{
+        setSavedFriend(true);
+    });
+
+    getSocket().on("exists_friend", ()=>{
+        setExistsFriend(true);
+    });
 
     // function to add friend
     const addFriend = () => {
-        getSocket().emit("add_friend");
+        getSocket().emit("add_friend", passUser(), friend_username);
     };
 
+    // function to see chatrooms you are part of
     const retrieveChat = () => {
-        getSocket().emit("");
+        getSocket().emit("join_room", passUser());
     }
 
     // Sets Logout display, otherwise goes to Sidebar display
@@ -68,7 +85,15 @@ function Logout({username}){
                 })}
             </ul>
             <div className="Header">Followers</div>
+            <input type="text" placeholder="Username" value={friend_username}
+                        onChange={(e) => {
+                            setFriendUsername(e.target.value);
+                        }}
+                    />
             <button onClick={addFriend}>Add Friend</button>
+            {failfriend && <p style={{color:"red"}}>Invalid Friend</p>}
+            {savedfriend && <p style={{color:"green"}}>Friend added!</p>}
+            {existsfriend && <p>Friend already exists!</p>}
             <ul className="SidebarList">
                 {friend.map((val, key) => {
                     return (
@@ -89,7 +114,7 @@ function Logout({username}){
     );
 }
 
-export default Logout;
+export default UserSidebar;
 
 /*return (
     <div className="Sidebar">

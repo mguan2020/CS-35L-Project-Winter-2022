@@ -81,11 +81,38 @@ io.on("connection", (socket) => {
   // FUNCTIONALITY HAS NOT BEEN TESTED
   socket.on("add_friend", (user, friend)=>{
     let filepath = "accounts/"+ user +"\.txt";
+    let friendpath = "accounts/"+ friend + "\.txt";
+    let exists = false;
+    //checks if user is valid
     if(fs.existsSync(filepath)){
-      fs.appendFile(filepath, friend+"\n",function (err){
-        if(err) throw err;
-        console.log("Saved friend!");
-      });
+      //checks if friend is already added to friends list
+      try {
+        const data = fs.readFileSync(filepath, 'utf-8');
+
+        const lines = data.split(/\r?\n/);
+
+        lines.forEach((line) => {
+          if (line == friend) {
+            exists = true;
+          }
+        });
+      } catch {
+        throw err;
+      }
+      
+      //checks if friend is valid
+      if (exists) {
+        socket.emit("exists_friend");
+      }
+      else if (!exists && fs.existsSync(friendpath)){
+        fs.appendFile(filepath, friend+"\n",function (err){
+          if(err) throw err;
+          console.log("Saved friend!");
+          socket.emit("saved_friend");
+        });
+      } else {
+        socket.emit("invalid_friend");
+      }
     } else {
       throw 'File doesn\'t exist';
     }
