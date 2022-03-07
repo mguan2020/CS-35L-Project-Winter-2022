@@ -25,6 +25,7 @@ function Register() {
     const [showLogout, setShowLogout] = useState(false); //used to show logout page
     const [failregister, setfailregister] = useState(false);
     const [faillogin, setfaillogin] = useState(false);
+    const [alreadylog, setalreadylog] = useState(false);
     const [successreg, setsuccessreg] = useState(false);
     const [successlogin, setsuccesslogin] = useState(false);
 
@@ -64,6 +65,10 @@ function Register() {
     };
 
     // Code to prevent caching of credentials
+    getSocket().on("already_logged",()=>{
+        setalreadylog(true);
+    });
+
     getSocket().on("logged_out",()=>{
         pass_username = "";
     });
@@ -118,6 +123,7 @@ function Register() {
                         }}
                     />
                     <button disabled={successlogin} onClick={login}>Login</button>
+                    {alreadylog && <p style={{color:"blue"}}>Already logged in elsewhere</p>}
                     {faillogin && <p style={{color:"red"}}>Incorrect username or password</p>}
                     {successlogin && <p className="loginmsg" >Login successful</p>}
                     {successlogin && <p className="loginasmsg" >Logged in as: </p>}

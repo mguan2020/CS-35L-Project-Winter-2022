@@ -7,7 +7,7 @@ body {
 .registration {
     display: flex;
     flex-direction: column;
-    place-items: top;
+    place-items: center;
 }
 .registration input {
     width: 180px;

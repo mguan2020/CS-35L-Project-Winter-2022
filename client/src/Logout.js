@@ -31,7 +31,7 @@ function Logout({socket, username}){
                 <p>Username: {username}</p>
                 <button onClick={showUserProfile}>Show My Profile</button>
                 <br></br>
-                <button onClick={()=>{setdisplay(false); getSocket().emit("log_out", (username));}}>Logout</button>
+                <button type = "button2" onClick={()=>{setdisplay(false); getSocket().emit("log_out", (username));}}>Logout</button>
             </div>
         </div>
         );
@@ -43,7 +43,7 @@ function Logout({socket, username}){
                 <p>Username: {username}</p>
                 <button onClick={returnHome}>Return Home</button>
                 <br></br>
-                <button onClick={()=>{setdisplay(false); getSocket().emit("log_out", (username));}}>Logout</button>
+                <button type = "button2" onClick={()=>{setdisplay(false); getSocket().emit("log_out", (username));}}>Logout</button>
             </div>
         </div>
         );

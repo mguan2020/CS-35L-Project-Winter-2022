@@ -6,7 +6,7 @@
 }
 
 .Header {
-    background-color: #eab471;
+    background-color: #a1d0ff;
     font-weight: bold;
     font-size: 29px;
     color: #237ac7;
@@ -42,4 +42,14 @@
 .chatroom #title {
     flex: 90%;
     color: black;
+}
+
+.UserSidebarList input {
+width: 180px;
+height: 20px;
+margin: 1px;
+border: 2px solid #43a047;
+border-radius: 5px;
+padding: 5px;
+font-size: 16px;
 }

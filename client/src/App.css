@@ -8,14 +8,14 @@ body {
     flex-direction: row;
 }
 .left {
-    background-color: #f8ce99;
-    flex: 17%;
+    background-color: #ceedff;
+    flex: 21%;
 }
 .middle {
-    background-color: #e7f1d3;
-    flex: 66%;
+    background-color: #ffffff;
+    flex: 58%;
 }
 .right {
-    background-color: #b1d8e8;
-    flex: 17%;
+    background-color: #ceedff;
+    flex: 21%;
 }

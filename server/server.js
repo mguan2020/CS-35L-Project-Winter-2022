@@ -14,6 +14,9 @@ app.use(express.json());
 
 const server = http.createServer(app);
 
+let onlineUsers = [];
+var dict = {};
+
 const io = new Server(server, { // connect express to socket.io server
   cors: {
     origin: "http://localhost:3000", // this is where the app will be run
@@ -130,6 +133,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("log_out",(user)=>{
+    if (onlineUsers.indexOf(user) != -1){
+      onlineUsers.splice(onlineUsers.indexOf(user), 1);
+      sockid = socket.id
+      delete dict.sockid;
+    }
     socket.emit("logged_out");
   });
 
@@ -226,31 +234,39 @@ io.on("connection", (socket) => {
     console.log(`Attempted login with id: ${user}`);
 
     let filepath = 'accounts/' + user + "\.txt";
-    
-    if(fs.existsSync(filepath)){
-      // console.log("valid username!");
 
-      let passLine = "Password: " + pass;
-      const file = fs.readFileSync(filepath, 'UTF-8');
-
-      const line = file.split(/\r?\n/);
-      if (line[0] == passLine)
-      {
-        /////// SEND VALID LOGIN DATA \\\\\\
-        console.log("valid login!");
-        socket.emit("valid_login", user);
-        socket.emit("logged_in", user);
+    // Make sure user isn't already logged in (in another tab)
+    if (onlineUsers.indexOf(user) != -1)
+    {
+      socket.emit("already_logged", user);
+    }
+    else {
+      if(fs.existsSync(filepath)){
+        // console.log("valid username!");
+  
+        let passLine = "Password: " + pass;
+        const file = fs.readFileSync(filepath, 'UTF-8');
+  
+        const line = file.split(/\r?\n/);
+        if (line[0] == passLine)
+        {
+          /////// SEND VALID LOGIN DATA \\\\\\
+          console.log("valid login!");
+          socket.emit("valid_login", user);
+          socket.emit("logged_in", user);
+          onlineUsers.push(user);
+          dict[socket.id] = user;
+        }
+        else{
+          console.log("invalid Password!");
+          socket.emit("invalid_password");
+        }
       }
       else{
-        console.log("invalid Password!");
+        console.log("invalid username");
         socket.emit("invalid_password");
       }
     }
-    else{
-      console.log("invalid username");
-      socket.emit("invalid_password");
-    }
-
   });
 
   socket.on("join_room", (data,username) => {
@@ -308,6 +324,16 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log(`User with id: ${socket.id} left`);
+    // Retrive username, remove user from dict
+    user = dict[socket.id]
+    sockid = socket.id
+    delete dict.sockid;
+
+
+    // Remove user from onlineUsers
+    if (onlineUsers.indexOf(user) != -1){
+      onlineUsers.splice(onlineUsers.indexOf(user), 1)
+    }
   });
 });
 

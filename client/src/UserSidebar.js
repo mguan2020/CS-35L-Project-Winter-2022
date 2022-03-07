@@ -59,6 +59,7 @@ function UserSidebar(){
     // function to add friend
     const addFriend = () => {
         getSocket().emit("add_friend", passUser(), friend_username);
+        getSocket().emit("show_friends", passUser());
     };
 
     // function to see chatrooms you are part of

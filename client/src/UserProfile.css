@@ -1,0 +1,25 @@
+.UserProfile {
+    height: 100vh;
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    place-items: center;
+    text-align: center;
+}
+
+.Header {
+    background-color: #a1d0ff;
+    font-weight: bold;
+    font-size: 29px;
+    color: #237ac7;
+    text-align: center;
+    height: 45px;
+}
+
+.i-circle {
+    background: #80ecba;
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 50%;
+    font-size: 35px;
+}

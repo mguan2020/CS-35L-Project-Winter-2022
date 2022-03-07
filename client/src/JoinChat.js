@@ -51,10 +51,11 @@ function JoinChat() {
     setShowChat(false);
   });
 
-  socket.on("logged_in", () => {
+  socket.on("logged_in", (user) => {
     setLoggedIn(true);
     setShowProfile(false);
     setShowChat(false);
+    username = user;
   });
   
   socket.on("logged_out", () => {
@@ -120,6 +121,7 @@ function JoinChat() {
               r = event.target.value;
             }}
           />
+          <br></br>
           <button onClick={joinRoom}>Join A Room </button>
           {/* <button onClick={updateValues}>Update Username </button> */}
            </div>
