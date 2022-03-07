@@ -25,7 +25,8 @@ function JoinChat() {
   // const [username, setUsername] = useState(""); // set states of username, room to be empty at first
   const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false);
-  const [showProfile, setShowProfile] = useState(false); // whether user has joined chat or not
+  const [showProfile, setShowProfile] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const joinRoom = () => {
     username = passUser();
@@ -52,7 +53,19 @@ function JoinChat() {
     setShowProfile(false);
     setShowChat(false);
   });
+
+  socket.on("logged_in", () => {
+    setLoggedIn(true);
+    setShowProfile(false);
+    setShowChat(false);
+  });
   
+  socket.on("stop", () => {
+    setLoggedIn(false);
+    setShowProfile(false);
+    setShowChat(false);
+  });
+
   let errmsg = "";
   if(room == "")
   {
@@ -63,6 +76,12 @@ function JoinChat() {
     errmsg = "Log in to join a room!";
   }
 
+  if(!(loggedIn)) {
+    return (<div className="JoinChat">
+    <h3>Welcome to our chat app. <br/>
+      Sign in to view chatrooms and friends!</h3>
+    </div>);
+  }
 
   if(showChat){
     return (<div className="JoinChat">

@@ -24,7 +24,6 @@ function Sidebar() {
     } else {
         return (
             <div className="Sidebar">
-                <p>Welcome to our chat app.<br/>Sign in to view chatrooms and friends!</p>
             </div>
         );
     }
