@@ -9,6 +9,7 @@ import "./Logout.css"
 function Logout({socket, username}){
     const [display, setdisplay] = useState(true);
 
+
     // Sets Logout display, otherwise goes to Register display
     return ((!display) ? (<Register/>) :
         <div className="Logout">

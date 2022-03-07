@@ -4,6 +4,9 @@ import {getSocket} from "./JoinChat";
 import "./Register.css";
 import Logout from "./Logout";
 
+var crypto = require('crypto');
+
+
 //const socket = io.connect("http://localhost:3001");
 
 let pass_username = "";
@@ -24,26 +27,34 @@ function Register() {
     const [faillogin, setfaillogin] = useState(false);
     const [successlogin, setsuccesslogin] = useState(false);
 
+    const hash_pass = (pass) => {
+        const crypto = require("crypto");
+        const secret = "Secret phrase to hash with";
+        const sha256Hasher = crypto.createHmac("sha256", secret);
+        const hash = sha256Hasher.update(pass).digest("hex");
+        console.log(hash);
+        return hash;
+    }
 
     const regist = () => {
         getSocket().emit("register",
         usernameReg, 
-        passwordReg);
+        String(hash_pass(passwordReg)));
     };
 
     const login = () => {
         getSocket().emit("login",
         usernameLog, 
-        passwordLog);
+        String(hash_pass(passwordLog)));
 
         ///// RECEIVE VALID LOGIN DATA \\\\\\
         getSocket().on("valid_login", (user) => {
             setfaillogin(false);
             setsuccesslogin(true);
+            setShowLogout(true);
+            console.log("Going to logout page");
             pass_username = usernameLog;
         });
-        setShowLogout(true); //set true to display logout page
-        console.log("Going to logout page")
         
         // pass_username = usernameLog;
     };
