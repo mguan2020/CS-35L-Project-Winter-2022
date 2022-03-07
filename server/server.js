@@ -7,6 +7,7 @@ const alert = require('alert');
 const readline = require('readline');
 const { promisify } = require('util')
 const { Server } = require("socket.io"); // socket.io will be responsible for client and server communication
+const { createSocket } = require("dgram");
 
 app.use(cors());
 app.use(express.json());
@@ -128,6 +129,28 @@ io.on("connection", (socket) => {
       socket.emit("stop");
   });
 
+  socket.on("stop_profile",()=>{
+    socket.emit("return_home");
+  });
+
+  socket.on("show_friends", (user) => {
+    let filepath = 'accounts/' + user + "\.txt";
+    let friend_list = []
+    
+    if(fs.existsSync(filepath)){
+      // console.log("valid username!");
+
+      const file = fs.readFileSync(filepath, 'UTF-8');
+
+      const lines = file.split(/\r?\n/);
+      for(let i = 2; i < lines.length-1; i++){
+        friend_list.push(lines[i] + "\n");
+      }
+    }
+    console.log(friend_list)
+    socket.emit("friend_list", friend_list);
+  });
+
   
   socket.on("send_like",(data,uname)=>{
 
@@ -228,7 +251,7 @@ io.on("connection", (socket) => {
     let filepath = 'accounts/' + username + "\.txt";
 
     //fs.appendFile(filepath,"Room: " + data); // add room number to file
-    console.log(`User with id: ${socket.id} joined room: ${data}`);
+    console.log(`User with id: ${username} joined room: ${data}`);
   });
 
   socket.on("send_message", (data) => { // listen for various events and respond

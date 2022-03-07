@@ -6,6 +6,7 @@ import Chat from "./Chat";
 import Register from "./Register"
 import {passUser} from "./Register"
 import {addData} from "./SidebarData";
+import UserProfile from "./UserProfile";
 const socket = io.connect("http://localhost:3001"); // connect our frontend with backend
 const x = 1;
 let username = "aa";
@@ -23,7 +24,8 @@ export function getSocket(){
 function JoinChat() {
   // const [username, setUsername] = useState(""); // set states of username, room to be empty at first
   const [room, setRoom] = useState("");
-  const [showChat, setShowChat] = useState(false); // whether user has joined chat or not
+  const [showChat, setShowChat] = useState(false);
+  const [showProfile, setShowProfile] = useState(false); // whether user has joined chat or not
 
   const joinRoom = () => {
     username = passUser();
@@ -39,24 +41,17 @@ function JoinChat() {
     }   
   };
 
+  const showUserProfile = () => {
+    username = passUser();
+    setShowChat(false);
+    setShowProfile(true);
+    socket.emit("show_friends", (username))
+  };
 
-  
-
-  // const updateValues = () => {
-  //   setUsername(passUser());
-  // }
-
-  // const receiveUsername = () => {
-  //   if (passUser != "") {
-  //     setUsername(passUser);
-  //   }
-  // };
-  // ///// RECEIVE VALID LOGIN DATA \\\\\\
-  // socket.on("valid_login", (user) => {
-  //   console.log("received!");
-  //   setUsername(user); // need this to execute
-  // });
-
+  socket.on("return_home", () => {
+    setShowProfile(false);
+    setShowChat(false);
+  });
   
   let errmsg = "";
   if(room == "")
@@ -76,6 +71,13 @@ function JoinChat() {
     </div>);
   }
 
+  if(showProfile){
+    return (<div className="UserProfile">
+      
+         <UserProfile socket={socket} username={username}/>
+    </div>);
+  }
+
   else{
     return ( <div className="JoinChat">
       <div className="joinChatContainer">
@@ -89,6 +91,7 @@ function JoinChat() {
             }}
           />
           <button onClick={joinRoom}>Join A Room </button>
+          <button onClick={showUserProfile}>Show My Profile</button>
           {/* <button onClick={updateValues}>Update Username </button> */}
            </div>
           <div>
