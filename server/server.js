@@ -168,13 +168,28 @@ io.on("connection", (socket) => {
 
     // Remove this user from everyone else's friends list
     fs.readdirSync("accounts/").forEach(file => {
-      fs.readFile("accounts/" + file, 'utf8', function(err, data) {
+      let userFilePath = "accounts/" + file;
+      fs.readFile(userFilePath, 'utf8', function(err, data) {
         let toRemove = user;
         let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
         let formatted = data.replace(re, '');
         formatted = formatted.replace(/\n{2,}/g, '\n');
       
-        fs.writeFile("accounts/" + file, formatted, 'utf8', function(err) {
+        fs.writeFile(userFilePath, formatted, 'utf8', function(err) {
+          if (err) return console.log(err);
+        });
+      });
+    });
+
+    // If user sent a message in the chat, 
+    // replace the sender with "deleted account"
+    fs.readdirSync("rooms/").forEach(file => {
+      let userFilePath = "rooms/" + file;
+      fs.readFile(userFilePath, 'utf8', function(err, data) {
+        let result = data.replace(new RegExp('by:' + user, 'g'), 'by:deleted account');
+      
+        // console.log(result);
+        fs.writeFile(userFilePath, result, 'utf8', function(err) {
           if (err) return console.log(err);
         });
       });
@@ -207,7 +222,7 @@ io.on("connection", (socket) => {
 
     fs.readFile("rooms/" + data.room + "\.txt", {encoding: 'utf8'}, function (err,dat) {
       
-      let old = data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')' + (data.numLikes-1) + ':liked by,';
+      let old = data.message + "(posted by:" + data.author + " " + " (posted at time: " + data.time + ')' + (data.numLikes-1) + ':liked by,';
       console.log(data.likedby[0]);
       console.log(data.likedby[1]);
 
@@ -215,7 +230,7 @@ io.on("connection", (socket) => {
         old += data.likedby[i] + " ";
       }
       old += "]\n";
-      let ne = data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')' + data.numLikes + ':liked by,';
+      let ne = data.message + "(posted by:" + data.author + " " + " (posted at time: " + data.time + ')' + data.numLikes + ':liked by,';
       for(let i = 0; i < data.likedby.length; i++){
         ne += data.likedby[i] + " ";
       }

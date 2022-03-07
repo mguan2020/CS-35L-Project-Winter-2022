@@ -8,6 +8,7 @@ body {
     display: flex;
     flex-direction: column;
     place-items: center;
+    text-align: center;
 }
 .registration input {
     width: 180px;
