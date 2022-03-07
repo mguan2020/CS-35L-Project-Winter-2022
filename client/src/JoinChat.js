@@ -24,11 +24,11 @@ function JoinChat() {
   // const [username, setUsername] = useState(""); // set states of username, room to be empty at first
   const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false); // whether user has joined chat or not
-  
+
   const joinRoom = () => {
     username = passUser();
     console.log("joinROOM! -> Username: " + username);
-    console.log("joinROOM! -> Username: " + room);
+    console.log("joinROOM! -> Room: " + room);
     r = room;
     if (username !== "" && room !== "") {
       addData(room);
@@ -57,6 +57,7 @@ function JoinChat() {
   //   setUsername(user); // need this to execute
   // });
 
+  
   let errmsg = "";
   if(room == "")
   {
@@ -67,12 +68,14 @@ function JoinChat() {
     errmsg = "Log in to join a room!";
   }
 
+
   if(showChat){
     return (<div className="JoinChat">
       
          <Chat socket={socket} username={username} room={room}/>
     </div>);
   }
+
   else{
     return ( <div className="JoinChat">
       <div className="joinChatContainer">

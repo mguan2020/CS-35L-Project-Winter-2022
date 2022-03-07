@@ -48,6 +48,11 @@ function Register() {
         // pass_username = usernameLog;
     };
 
+    // Code to prevent caching of credentials
+    getSocket().on("stop",()=>{
+        pass_username = "";
+    });
+
     getSocket().on("fail_register",(user)=>{
         setfailregister(true);
     });

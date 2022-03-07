@@ -44,7 +44,11 @@ function Logout({username}){
         getSocket().emit("add_friend");
     };
 
-    // Sets Logout display, otherwise goes to Register display
+    const retrieveChat = () => {
+        getSocket().emit("");
+    }
+
+    // Sets Logout display, otherwise goes to Sidebar display
     return ((!display) ? (<Sidebar/>) :
         <div className="User_Sidebar">
             <div className="Header"> Chat Rooms </div>
@@ -53,9 +57,7 @@ function Logout({username}){
                     return (
                         <li key={key}
                             className = "chatroom"
-                            onClick={() => {
-                                window.location.pathname = val.link
-                            }}>
+                            onClick={retrieveChat}>
                             <div id="spacer"></div>
                             <div id="title">
                                 Room: {val.title}

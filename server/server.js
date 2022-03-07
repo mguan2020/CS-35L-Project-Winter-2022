@@ -78,6 +78,7 @@ io.on("connection", (socket) => {
 
   // Code to receive info on adding friend and saving to account.txt
   // simply appends to end of file
+  // FUNCTIONALITY HAS NOT BEEN TESTED
   socket.on("add_friend", (user, friend)=>{
     let filepath = "accounts/"+ user +"\.txt";
     if(fs.existsSync(filepath)){
