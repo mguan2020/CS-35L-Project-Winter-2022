@@ -73,6 +73,11 @@ io.on("connection", (socket) => {
       if(err) throw err;
       console.log("Saved!");
       });
+
+      fs.appendFile(filepath + "_rooms","Rooms: " + "\n",function (err){
+      if(err) throw err;
+      console.log("Saved Room File!");
+      });
     }
   });
 
