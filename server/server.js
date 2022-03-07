@@ -129,6 +129,10 @@ io.on("connection", (socket) => {
       socket.emit("stop");
   });
 
+  socket.on("log_out",()=>{
+    socket.emit("logged_out");
+  });
+
   socket.on("stop_profile",()=>{
     socket.emit("return_home");
   });

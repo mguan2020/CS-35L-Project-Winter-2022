@@ -15,6 +15,10 @@ function Sidebar() {
         setShowSidebar(true);
         username = arg;
     });
+
+    getSocket().on("logged_out", ()=>{
+        setShowSidebar(false);
+    });
     
     //if logged in, show friends and chatrooms, otherwise don't
     if (showSidebar){

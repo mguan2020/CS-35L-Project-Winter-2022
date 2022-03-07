@@ -60,7 +60,7 @@ function JoinChat() {
     setShowChat(false);
   });
   
-  socket.on("stop", () => {
+  socket.on("logged_out", () => {
     setLoggedIn(false);
     setShowProfile(false);
     setShowChat(false);

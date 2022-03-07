@@ -16,7 +16,7 @@ function Logout({socket, username}){
             <div className="logoutContainer">
                 <h3>Logout</h3>
                 <p>Signed in as {username}</p>
-                <button onClick={()=>{setdisplay(false); getSocket().emit("stop_chat");}}>Logout</button>
+                <button onClick={()=>{setdisplay(false); getSocket().emit("log_out");}}>Logout</button>
             </div>
         </div>
     );
