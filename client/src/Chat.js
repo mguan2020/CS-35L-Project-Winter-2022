@@ -201,10 +201,8 @@ socket.on("receive_data",(data)=>{
         <button onClick={sendMessage}>Send</button>
       </div>
 
-     
-      
       <input type="button" value="Leave room" onClick={leaveRoom}></input>
-
+      
       <SearchResult list={messageR} term={finalSearchTerm} search={isSearching}/>
     </div>
     

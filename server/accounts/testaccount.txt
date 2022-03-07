@@ -1,2 +1,0 @@
-Password: 123
-Friends: 

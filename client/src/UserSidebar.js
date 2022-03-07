@@ -24,20 +24,7 @@ function UserSidebar(){
             link: "/Family",
         }
     ]);
-   const [friend,setfriend] = useState([
-    {
-        title: "Friend 1",
-        link: "/Group",
-    },
-    {
-        title: "Friend 2",
-        link: "/Friends",
-    },
-    {
-        title: "Friend 3",
-        link: "/Family",
-    }
-    ]);
+   const [friend,setfriend] = useState([]);
 
     // when user logs out, sidebar will not display friends and chatrooms
     getSocket().on("logged_out", ()=>{
@@ -85,6 +72,7 @@ function UserSidebar(){
                     );
                 })}
             </ul>
+            <br></br>
             <div className="Header">Followers</div>
             <input type="text" placeholder="Username" value={friend_username}
                         onChange={(e) => {

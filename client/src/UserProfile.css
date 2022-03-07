@@ -23,3 +23,20 @@
     border-radius: 50%;
     font-size: 35px;
 }
+
+.UserProfile button {
+    width: 195px;
+    height: 28px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    background: #43a047;
+    color: white;
+    cursor: pointer;
+}
+
+.UserProfile button:hover {
+    background: #2e7d32;
+}
