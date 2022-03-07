@@ -76,9 +76,26 @@ io.on("connection", (socket) => {
     }
   });
 
+  // Code to receive info on adding friend and saving to account.txt
+  // simply appends to end of file
+  socket.on("add_friend", (user, friend)=>{
+    let filepath = "accounts/"+ user +"\.txt";
+    if(fs.existsSync(filepath)){
+      fs.appendFile(filepath, friend+"\n",function (err){
+        if(err) throw err;
+        console.log("Saved friend!");
+      });
+    } else {
+      throw 'File doesn\'t exist';
+    }
+  });
+
+  // Code to stop logged_in components from displaying
   socket.on("stop_chat",()=>{
       socket.emit("stop");
   });
+
+  
   socket.on("send_like",(data,uname)=>{
 
     fs.readFile("rooms/" + data.room + "\.txt", {encoding: 'utf8'}, function (err,dat) {
@@ -159,6 +176,7 @@ io.on("connection", (socket) => {
         /////// SEND VALID LOGIN DATA \\\\\\
         console.log("valid login!");
         socket.emit("valid_login", user);
+        socket.emit("logged_in", user)
       }
       else{
         console.log("invalid Password!");

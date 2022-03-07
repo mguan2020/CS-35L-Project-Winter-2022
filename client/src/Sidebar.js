@@ -1,50 +1,32 @@
 import "./Sidebar.css";
 import React from 'react';
-import {useEffect,useState} from "react"
+import {useState} from "react"
+import UserSidebar from "./UserSidebar"
 import {SidebarData} from './SidebarData'
 import {getSData} from "./SidebarData"
+import { Socket } from "socket.io-client";
+import {getSocket} from "./JoinChat"
 function Sidebar() {
- const [d,setd] = useState([
-        {
-            title: "Group",
-            link: "/Group",
-        },
-        {
-            title: "Friends",
-            link: "/Friends",
-        },
-        {
-            title: "Family",
-            link: "/Family",
-        }
-   ]);
-
-
-   function addData(room){
-       
-   }
-
-    return (
-        <div className="Sidebar">
-            <div className="Header"> Chat Rooms </div>
-            <ul className="SidebarList">
-                {d.map((val, key) => {
-                    return (
-                        <li key={key}
-                            className = "chatroom"
-                            onClick={() => {
-                                window.location.pathname = val.link
-                            }}>
-                            <div id="spacer"></div>
-                            <div id="title">
-                                Room: {val.title}
-                            </div>
-                        </li>
-                    );
-                })}
-            </ul>
-        </div>
-    );
+    const [showSidebar, setShowSidebar] = useState(false);
+    let username = "";
+    // check if user is logged in
+    getSocket().on("logged_in", (arg)=>{
+        setShowSidebar(true);
+        username = arg;
+    });
+    
+    //if logged in, show friends and chatrooms, otherwise don't
+    if (showSidebar){
+        return (<div className="User_Sidebar">
+            <UserSidebar username={username}/>
+        </div>)
+    } else {
+        return (
+            <div className="Sidebar">
+                <h>Welcome to our chat app.<br/>Sign in to view chatrooms and friends!</h>
+            </div>
+        );
+    }
 }
 
 export default Sidebar;
