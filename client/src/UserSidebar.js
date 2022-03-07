@@ -10,6 +10,8 @@ function UserSidebar(){
     const [failfriend, setFailFriend] = useState(false);
     const [savedfriend, setSavedFriend] = useState(false);
     const [existsfriend, setExistsFriend] = useState(false);
+    const [blankFriend, setBlankFriend] = useState(false);
+    const [selfAdd, setSelfAdd] = useState(false);
     const [d,setd] = useState([
         {
             title: "Group",
@@ -33,20 +35,47 @@ function UserSidebar(){
 
     getSocket().on("invalid_friend", ()=>{
         setFailFriend(true);
+        setSavedFriend(false);
+        setSelfAdd(false);
+        setExistsFriend(false);
+        setBlankFriend(false);
     });
 
     getSocket().on("saved_friend", ()=>{
+        setExistsFriend(false);
+        setBlankFriend(false);
+        setFailFriend(false);
         setSavedFriend(true);
+        setSelfAdd(false);
     });
 
     getSocket().on("exists_friend", ()=>{
         setExistsFriend(true);
+        setBlankFriend(false);
+        setFailFriend(false);
+        setSavedFriend(false);
+        setSelfAdd(false);
     });
 
     // function to add friend
     const addFriend = () => {
-        getSocket().emit("add_friend", passUser(), friend_username);
-        getSocket().emit("show_friends", passUser());
+        if (friend_username != "" && passUser() != friend_username)
+        {
+            getSocket().emit("add_friend", passUser(), friend_username);
+            // getSocket().emit("show_friends", passUser());
+        }
+        else if (friend_username == "") {
+            setBlankFriend(true);
+            setFailFriend(false);
+            setSavedFriend(false);
+            setSelfAdd(false);
+        }
+        else if (friend_username == passUser()) {
+            setBlankFriend(false);
+            setFailFriend(false);
+            setSavedFriend(false);
+            setSelfAdd(true);
+        }
     };
 
     // function to see chatrooms you are part of
@@ -81,6 +110,8 @@ function UserSidebar(){
                     />
             <button onClick={addFriend}>Add Friend</button>
             {failfriend && <p style={{color:"red"}}>Invalid Friend</p>}
+            {blankFriend && <p style={{color:"red"}}>Must Enter Friend</p>}
+            {selfAdd && <p style={{color:"red"}}>Can't add yourself!</p>}
             {savedfriend && <p style={{color:"green"}}>Friend added!</p>}
             {existsfriend && <p>Friend already exists!</p>}
             <ul className="SidebarList">

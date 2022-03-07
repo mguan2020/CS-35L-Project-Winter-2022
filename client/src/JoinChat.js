@@ -27,6 +27,7 @@ function JoinChat() {
   const [showChat, setShowChat] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [blankChat, setBlankChat] = useState(false);
 
   // const showUserProfile = () => {
   //   username = passUser();
@@ -65,16 +66,21 @@ function JoinChat() {
   });
 
   const joinRoom = () => {
-    username = passUser();
-    console.log("joinROOM! -> Username: " + username);
-    console.log("joinROOM! -> Room: " + room);
-    r = room;
-    if (loggedIn != false && room !== "") {
-      addData(room);
-      socket.emit("join_room", room,username); // send the user to a chatroom
-       
-      setShowChat(true);
-      socket.emit("get_data",getRoom());
+    if (room != "") {
+      username = passUser();
+      console.log("joinROOM! -> Username: " + username);
+      console.log("joinROOM! -> Room: " + room);
+      r = room;
+      if (loggedIn != false && room !== "") {
+        addData(room);
+        socket.emit("join_room", room,username); // send the user to a chatroom
+        
+        setShowChat(true);
+        socket.emit("get_data",getRoom());
+      }
+    }
+    else {
+      setBlankChat(true);
     }
   };
 
@@ -123,6 +129,7 @@ function JoinChat() {
           />
           <br></br>
           <button onClick={joinRoom}>Join A Room </button>
+          {blankChat && <p style={{color:"red"}}>Room ID cannot be blank</p>}
           {/* <button onClick={updateValues}>Update Username </button> */}
            </div>
           <div>

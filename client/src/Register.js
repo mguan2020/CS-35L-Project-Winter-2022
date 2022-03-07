@@ -24,6 +24,7 @@ function Register() {
     const [passwordLog, setPasswordLog] = useState("");
     const [showLogout, setShowLogout] = useState(false); //used to show logout page
     const [failregister, setfailregister] = useState(false);
+    const [blankinput, setblankinput] = useState(false);
     const [faillogin, setfaillogin] = useState(false);
     const [alreadylog, setalreadylog] = useState(false);
     const [successreg, setsuccessreg] = useState(false);
@@ -39,29 +40,38 @@ function Register() {
     }
 
     const regist = () => {
-        getSocket().emit("register",
-        usernameReg, 
-        String(hash_pass(passwordReg)));
-        getSocket().on("valid_register", (user) => {
+        if (usernameReg != "" && passwordReg != "") {
+            getSocket().emit("register",
+            usernameReg, 
+            String(hash_pass(passwordReg)));
+            getSocket().on("valid_register", (user) => {
             setsuccessreg(true);
-        })
+            })
+        }
+        else {
+            setblankinput(true);
+        }
     };
 
     const login = () => {
-        getSocket().emit("login",
-        usernameLog, 
-        String(hash_pass(passwordLog)));
+        if (usernameLog != "" && passwordLog != "") {
+            getSocket().emit("login",
+            usernameLog, 
+            String(hash_pass(passwordLog)));
 
-        ///// RECEIVE VALID LOGIN DATA \\\\\\
-        getSocket().on("valid_login", (user) => {
-            setfaillogin(false);
-            setsuccesslogin(true);
-            setShowLogout(true);
-            console.log("Going to logout page");
-            pass_username = usernameLog;
-        });
-        
-        // pass_username = usernameLog;
+            ///// RECEIVE VALID LOGIN DATA \\\\\\
+            getSocket().on("valid_login", (user) => {
+                setfaillogin(false);
+                setsuccesslogin(true);
+                setShowLogout(true);
+                console.log("Going to logout page");
+                pass_username = usernameLog;
+            });
+        }
+        else{
+            setsuccesslogin(false);
+            setfaillogin(true);
+        }
     };
 
     // Code to prevent caching of credentials
@@ -75,10 +85,12 @@ function Register() {
 
     getSocket().on("fail_register",(user)=>{
         setfailregister(true);
+        setblankinput(false);
     });
 
     getSocket().on("valid_register",()=>{
         setfailregister(false);
+        setblankinput(false);
     });
 
     getSocket().on("invalid_password",()=>{
@@ -107,6 +119,7 @@ function Register() {
                         }}
                     />
                     <button onClick={regist}>Register</button>
+                    {blankinput && <p style={{color:"red"}}>Must enter username/password</p>}
                     {failregister && <p style={{color:"red"}}>Username already exists!</p>}
                     {successreg && <p style={{color:"green"}}>Account registered!</p>}
                 </div>
