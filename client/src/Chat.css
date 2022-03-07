@@ -1,6 +1,13 @@
 .chat-window {
-  width: 100%;
+  width: 58%;
   height: 100%;
+  position:absolute;
+  top:0;
+  right:21%;
+}
+
+#growth {
+  overflow-y: scroll;
 }
 
 .chat-window p {
