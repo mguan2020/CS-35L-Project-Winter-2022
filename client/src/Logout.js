@@ -3,6 +3,7 @@ import { Socket } from "socket.io-client";
 //import "./Logout.css"
 import Register from "./Register";
 import {getSocket} from "./JoinChat";
+import "./Logout.css"
 
 
 function Logout({socket, username}){
@@ -10,9 +11,9 @@ function Logout({socket, username}){
 
     // Sets Logout display, otherwise goes to Register display
     return ((!display) ? (<Register/>) :
-        <div>
-            <div className="Logout">
-                <h1>Logout</h1>
+        <div className="Logout">
+            <div className="logoutContainer">
+                <h3>Logout</h3>
                 <p>Signed in as {username}</p>
                 <button onClick={()=>{setdisplay(false); getSocket().emit("stop_chat");}}>Logout</button>
             </div>
