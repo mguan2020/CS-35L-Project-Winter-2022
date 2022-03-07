@@ -41,6 +41,7 @@ function Chat({ socket, username, room}) {
 
       await socket.emit("send_message", messageData); // talk to server
       console.log(messageData.room + "x");
+      console.log(messageData.likedby);
       setMessageList((list) => [...list, messageData]);
     //  setnumLikes((list) => [...list, 0]);
       setCurrentMessage("");
@@ -162,7 +163,9 @@ socket.on("receive_data",(data)=>{
                       if(username != messageContent.author && !messageContent.likedby.includes(username)){
                         let n = [...messageList];
                         n[i].numLikes++;
+                        console.log(n[i].likedby);
                         n[i].likedby.push(username);
+                        console.log(n[i].likedby);
                         setMessageList(n);
                         socket.emit("send_like",messageContent,username);
                         }

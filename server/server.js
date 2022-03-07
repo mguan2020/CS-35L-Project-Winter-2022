@@ -40,7 +40,7 @@ function getInitialMsg(room){
           let t = line.substring(line.lastIndexOf("time: ") + 6, line.lastIndexOf(")"));
           let l = line.substring(line.lastIndexOf(')')+1,line.lastIndexOf(':'));
           let q = line.substring(line.lastIndexOf(",")+1,line.lastIndexOf("]")-1).split(" ");
-
+          console.log(q);
           let combined = {room: room, author: a, message: m, time: t, numLikes: parseInt(l),likedby:q};
           list.push(combined);
       });
@@ -173,8 +173,11 @@ io.on("connection", (socket) => {
           let a = line.substring(line.lastIndexOf("by:") + 3, line.lastIndexOf(" (posted at time"));
           let t = line.substring(line.lastIndexOf("time: ") + 6, line.lastIndexOf(")"));
           let l = line.substring(line.lastIndexOf(')')+1,line.lastIndexOf(':'));
-          let q = line.substring(line.lastIndexOf(",")+1,line.lastIndexOf("]")-1).split(" ");
+          let start = line.lastIndexOf(",")+1;
+          let end = line.lastIndexOf("]")-1;
 
+          let q = (start > end) ? [] : line.substring(start,end).split(" ");
+          console.log(q);
 
           let combined = {room: room, author: a, message: m, time: t, numLikes: parseInt(l),likedby:q};
           list.push(combined);
