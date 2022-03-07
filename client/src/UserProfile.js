@@ -18,9 +18,9 @@ function UserProfile({username}){
         setFList(["You aren't following anybody yet!"])
     }
 
-    // const deleteAccount = () => {
-    //     getSocket().emit("delete_account", username)
-    // }
+    const deleteAccount = () => {
+        getSocket().emit("delete_account", username)
+    }
 
     return (
         <div className="Profile">
@@ -32,7 +32,7 @@ function UserProfile({username}){
                 <h3>{fList}</h3>
                 </p>
                 <br></br>
-                {/* <button onClick={deleteAccount}>Delete Account</button> */}
+                <button onClick={deleteAccount}>Delete Account</button>
             </div>
         </div>
     );

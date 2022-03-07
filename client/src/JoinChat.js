@@ -28,6 +28,7 @@ function JoinChat() {
   const [showProfile, setShowProfile] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [blankChat, setBlankChat] = useState(false);
+  const [deleted, setDeleted] = useState(false);
 
   // const showUserProfile = () => {
   //   username = passUser();
@@ -56,6 +57,7 @@ function JoinChat() {
     setLoggedIn(true);
     setShowProfile(false);
     setShowChat(false);
+    setDeleted(false);
     username = user;
   });
   
@@ -63,6 +65,10 @@ function JoinChat() {
     setLoggedIn(false);
     setShowProfile(false);
     setShowChat(false);
+  });
+
+  socket.on("acc_deleted", () => {
+    setDeleted(true);
   });
 
   const joinRoom = () => {
@@ -96,7 +102,8 @@ function JoinChat() {
 
   if(!(loggedIn)) {
     return (<div className="JoinChat">
-    <h3>Welcome to our chat app. <br/>
+    <h3>{deleted && <p style={{color:"red"}}>Account Deleted</p>}
+    Welcome to our chat app. <br/>
       Sign in to view chatrooms and friends!</h3>
     </div>);
   }

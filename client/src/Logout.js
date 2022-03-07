@@ -21,9 +21,9 @@ function Logout({socket, username}){
         setProfileShown(false);
     };
 
-    // getSocket().on("acc_deleted", () =>{
-    //     setdisplay(false);
-    // })
+    getSocket().on("acc_deleted", () =>{
+        setdisplay(false);
+    })
 
 
     // Sets Logout display, otherwise goes to Register display

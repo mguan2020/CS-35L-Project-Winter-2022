@@ -1,5 +1,4 @@
 Password: 84a3dbf6dee4deb8a81af868a1dfc5dae5f42767136d7e7b07ded2383d68608d
-Friends: 
-sam
+Friends:
 sax
 tets

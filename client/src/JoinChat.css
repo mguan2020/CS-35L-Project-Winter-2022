@@ -4,6 +4,7 @@
   color: #212121;
   display: grid;
   place-items: center;
+  text-align: center;
 }
 body {
   margin: 0%;

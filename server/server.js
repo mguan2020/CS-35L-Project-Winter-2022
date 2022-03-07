@@ -145,42 +145,44 @@ io.on("connection", (socket) => {
     socket.emit("return_home");
   });
 
-  // If we decide to implement delete_account:
-  // socket.on("delete_account",(user)=>{
-  //   // Remove the user from onlineUsers
-  //   if (onlineUsers.indexOf(user) != -1){
-  //     onlineUsers.splice(onlineUsers.indexOf(user), 1);
-  //     sockid = socket.id
-  //     delete dict.sockid;
-  //   }
+  // DELETE ACCOUNT IMPLEMENTATION
+  socket.on("delete_account",(user)=>{
+    // Remove the user from onlineUsers
+    if (onlineUsers.indexOf(user) != -1){
+      onlineUsers.splice(onlineUsers.indexOf(user), 1);
+      sockid = socket.id
+      delete dict.sockid;
+    }
 
-  //   // Delete the user's .txt file
-  //   let filepath = 'accounts/' + user + "\.txt";
-  //   if(fs.existsSync(filepath)){
-  //     fs.unlinkSync(filepath);
-  //   }
+    // Delete the user's .txt file
+    let filepath = 'accounts/' + user + "\.txt";
+    if(fs.existsSync(filepath)){
+      fs.unlinkSync(filepath);
+    }
 
-  //   let filepath2 = 'accounts/' + user + "_rooms" + "\.txt";
-  //   if(fs.existsSync(filepath2)){
-  //     fs.unlinkSync(filepath2);
-  //   }
+    // Delete the user's room's file
+    let filepath2 = 'accounts/' + user + "_rooms" + "\.txt";
+    if(fs.existsSync(filepath2)){
+      fs.unlinkSync(filepath2);
+    }
 
-  //   // Remove this user from everyone else's friends list
-  //   fs.readdirSync("accounts/").forEach(file => {
-  //     const userFile = fs.readFileSync("accounts/" + file, 'UTF-8');
+    // Remove this user from everyone else's friends list
+    fs.readdirSync("accounts/").forEach(file => {
+      fs.readFile("accounts/" + file, 'utf8', function(err, data) {
+        let toRemove = user;
+        let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
+        let formatted = data.replace(re, '');
+        formatted = formatted.replace(/\n{2,}/g, '\n');
+      
+        fs.writeFile("accounts/" + file, formatted, 'utf8', function(err) {
+          if (err) return console.log(err);
+        });
+      });
+    });
 
-  //     const lines = userFile.split(/\r?\n/);
-  //     for(let i = 2; i < lines.length-1; i++){
-  //       if (lines[i] == user){
-  //         var linesExceptFirst = userFile.split('\n').slice(i).join('\n');
-  //         fs.writeFile(userFile, linesExceptFirst);
-  //       }
-  //     }
-  //   })
-
-  //   socket.emit("logged_out");
-  //   socket.emit("acc_deleted");
-  // });
+    socket.emit("logged_out");
+    socket.emit("acc_deleted");
+  });
 
   socket.on("show_friends", (user) => {
     socket.emit("profile_showing");
