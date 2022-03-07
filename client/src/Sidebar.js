@@ -17,13 +17,13 @@ function Sidebar() {
     
     //if logged in, show friends and chatrooms, otherwise don't
     if (showSidebar){
-        return (<div className="User_Sidebar">
+        return (<div className="UserSidebar">
             <UserSidebar username={username}/>
         </div>)
     } else {
         return (
             <div className="Sidebar">
-                <h>Welcome to our chat app.<br/>Sign in to view chatrooms and friends!</h>
+                <p>Welcome to our chat app.<br/>Sign in to view chatrooms and friends!</p>
             </div>
         );
     }

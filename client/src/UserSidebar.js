@@ -1,4 +1,5 @@
 import Sidebar from "./Sidebar";
+import "./UserSidebar.css"
 import React, { useEffect, useState } from "react";
 import {getSocket} from "./JoinChat";
 
@@ -50,9 +51,9 @@ function Logout({username}){
 
     // Sets Logout display, otherwise goes to Sidebar display
     return ((!display) ? (<Sidebar/>) :
-        <div className="User_Sidebar">
+        <div className="UserSidebar">
             <div className="Header"> Chat Rooms </div>
-            <ul className="SidebarList">
+            <ul className="UserSidebarList">
                 {d.map((val, key) => {
                     return (
                         <li key={key}
