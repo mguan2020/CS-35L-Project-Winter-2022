@@ -8,6 +8,7 @@ const readline = require('readline');
 const { promisify } = require('util')
 const { Server } = require("socket.io"); // socket.io will be responsible for client and server communication
 const { createSocket } = require("dgram");
+const crypto = require("crypto");
 
 app.use(cors());
 app.use(express.json());
@@ -86,9 +87,22 @@ io.on("connection", (socket) => {
     }
   });
 
+  //Generate public and private key pair for each user.
+  socket.on("generate_keys", () => {
+    console.log("Generating keys!");
+    const alice = crypto.createECDH('secp256k1');
+    alice.generateKeys();
+    const publicKey = alice.getPublicKey().toString('base64');
+    const privateKey = alice.getPrivateKey().toString('base64');
+    socket.emit("save_public", publicKey, privateKey);
+  });
+
+  //socket.on("establish_connection", ()=>{
+
+  //})
+
   // Code to receive info on adding friend and saving to account.txt
   // simply appends to end of file
-  // FUNCTIONALITY HAS NOT BEEN TESTED
   socket.on("add_friend", (user, friend)=>{
     let filepath = "accounts/"+ user +"\.txt";
     let friendpath = "accounts/"+ friend + "\.txt";
@@ -123,7 +137,8 @@ io.on("connection", (socket) => {
         });
 
         fs.appendFile(fpath,user+"\n",function(err){
-            console.log("Followers updated");
+          if(err) throw err;  
+          console.log("Followers updated");
             
         });
       } else {

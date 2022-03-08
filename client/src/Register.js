@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {getSocket} from "./JoinChat";
 import "./Register.css";
 import Logout from "./Logout";
+import { fstat } from "fs";
 
 
 let pass_username = "";
@@ -24,13 +25,14 @@ function Register() {
     const [alreadylog, setalreadylog] = useState(false);
     const [successreg, setsuccessreg] = useState(false);
     const [successlogin, setsuccesslogin] = useState(false);
+    const [privateKey, setPrivateKey] = useState("");
+    const [publicKey, setPublicKey] = useState("");
 
     const hash_pass = (pass) => {
         const crypto = require("crypto");
         const secret = "Secret phrase to hash with";
         const sha256Hasher = crypto.createHmac("sha256", secret);
         const hash = sha256Hasher.update(pass).digest("hex");
-        console.log(hash);
         return hash;
     }
 
@@ -40,7 +42,13 @@ function Register() {
             usernameReg, 
             String(hash_pass(passwordReg)));
             getSocket().on("valid_register", (user) => {
-            setsuccessreg(true);
+                setsuccessreg(true);
+                getSocket().emit("generate_keys", usernameReg);
+                getSocket().on("save_public", (public_key, private_key) => {
+                    console.log("Save public key code here.");
+                    setPrivateKey(private_key);
+                    setPublicKey(public_key);
+                });
             })
         }
         else {
@@ -116,7 +124,7 @@ function Register() {
                     <button onClick={regist}>Register</button>
                     {blankinput && <p style={{color:"red"}}>Must enter username/password</p>}
                     {failregister && <p style={{color:"red"}}>Username already exists!</p>}
-                    {successreg && <p style={{color:"green"}}>Account registered!</p>}
+                    {successreg && <p style={{color:"green"}}>Account registered!<br/>Save your private key!<br/>{privateKey}</p>}
                 </div>
                 <div className="login">
                     <h1>Login</h1>
