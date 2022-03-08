@@ -19,7 +19,7 @@ var dict = {};
 
 const io = new Server(server, { // connect express to socket.io server
   cors: {
-    origin: "http://localhost:3002", // this is where the app will be run
+    origin: "http://localhost:3000", // this is where the app will be run
     methods: ["GET", "POST"],
   },
 });
