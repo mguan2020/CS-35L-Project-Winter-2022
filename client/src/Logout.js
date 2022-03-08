@@ -12,7 +12,8 @@ function Logout({socket, username}){
 
     
     const showUserProfile = () => {
-        socket.emit("show_friends", (username))
+        socket.emit("show_friends", (username));
+        socket.emit("show_followers",(username));
         setProfileShown(true);
     };
     

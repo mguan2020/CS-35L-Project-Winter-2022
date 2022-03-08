@@ -8,14 +8,24 @@ import "./UserProfile.css"
 
 function UserProfile({username}){
     const [fList, setFList] = useState([]); 
-
+    const [followers,setfollowers] = useState([]);
     getSocket().on("friend_list",(friend_list)=>{
         setFList(friend_list)
     });
 
+    getSocket().on("followers_list",(friend_list)=>{
+        setfollowers(friend_list)
+    });
+
+    
+
     if (fList.length == 0)
     {
         setFList(["You aren't following anybody yet!"])
+    }
+
+    if(followers.length == 0){
+        setfollowers(["No followers yet!"])
     }
 
     const deleteAccount = () => {
@@ -30,6 +40,10 @@ function UserProfile({username}){
                 <br></br>
                 <p>Following:
                 <h3>{fList}</h3>
+                </p>
+                <br></br>
+                <p>You are being followed by:
+                <h3>{followers}</h3>
                 </p>
                 <br></br>
                 <button onClick={deleteAccount}>Delete Account</button>

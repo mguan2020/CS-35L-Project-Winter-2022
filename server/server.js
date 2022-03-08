@@ -19,7 +19,7 @@ var dict = {};
 
 const io = new Server(server, { // connect express to socket.io server
   cors: {
-    origin: "http://localhost:3000", // this is where the app will be run
+    origin: "http://localhost:3002", // this is where the app will be run
     methods: ["GET", "POST"],
   },
 });
@@ -91,6 +91,7 @@ io.on("connection", (socket) => {
   socket.on("add_friend", (user, friend)=>{
     let filepath = "accounts/"+ user +"\.txt";
     let friendpath = "accounts/"+ friend + "\.txt";
+    let fpath = "accounts/" + friend + "_followers\.txt";
     let exists = false;
     //checks if user is valid
     if(fs.existsSync(filepath)){
@@ -118,6 +119,11 @@ io.on("connection", (socket) => {
           if(err) throw err;
           console.log("Saved friend!");
           socket.emit("saved_friend");
+        });
+
+        fs.appendFile(fpath,user+"\n",function(err){
+            console.log("Followers updated");
+            
         });
       } else {
         socket.emit("invalid_friend");
@@ -215,6 +221,24 @@ io.on("connection", (socket) => {
       }
     }
     socket.emit("friend_list", friend_list);
+  });
+
+  socket.on("show_followers", (user) => {
+    socket.emit("profile_showing");
+    let filepath = 'accounts/' + user + "_followers\.txt";
+    let friend_list = []
+    
+    if(fs.existsSync(filepath)){
+      // console.log("valid username!");
+
+      const file = fs.readFileSync(filepath, 'UTF-8');
+
+      const lines = file.split(/\r?\n/);
+      for(let i = 0; i < lines.length-1; i++){
+        friend_list.push(lines[i] + "\n");
+      }
+    }
+    socket.emit("followers_list", friend_list);
   });
 
   

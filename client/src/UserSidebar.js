@@ -62,6 +62,7 @@ function UserSidebar(){
         if (friend_username != "" && passUser() != friend_username)
         {
             getSocket().emit("add_friend", passUser(), friend_username);
+            
             // getSocket().emit("show_friends", passUser());
         }
         else if (friend_username == "") {
@@ -114,6 +115,8 @@ function UserSidebar(){
             {selfAdd && <p style={{color:"red"}}>Can't add yourself!</p>}
             {savedfriend && <p style={{color:"green"}}>Friend added!</p>}
             {existsfriend && <p>Friend already exists!</p>}
+
+
             <ul className="SidebarList">
                 {friend.map((val, key) => {
                     return (
