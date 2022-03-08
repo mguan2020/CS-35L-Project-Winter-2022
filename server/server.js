@@ -65,6 +65,7 @@ io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`); // who connected to the message app
   
   socket.on("register", (user, pass) => {
+
     let filepath = 'accounts/' + user + "\.txt";
     if(fs.existsSync(filepath)){
       console.log("Username already exists!")
@@ -352,7 +353,35 @@ io.on("connection", (socket) => {
 
   socket.on("join_room", (data,username) => {
     socket.join(data);
-    let filepath = 'accounts/' + username + "\.txt";
+      let filepath = 'accounts/' + username + "\.txt";
+
+      
+      //array to keep track of the rooms a user is apart of
+      let roomlist = [];
+      //code to make list of rooms
+      let roomfilepath = 'accounts/userrooms/' + username + '\.txt';
+      fs.appendFile(roomfilepath, data +'\n', function (err) {
+          if (err) throw err;
+      });
+
+
+      if (fs.existsSync(roomfilepath)) {
+          try {
+              const data = fs.readFileSync(roomfilepath, 'utf-8');
+
+              const lines = data.split(/\r?\n/);
+              lines.forEach((line) => {
+                  roomlist.push(line + "\n");
+                  console.log(`Added ${line} to ${username} room list`);
+
+              });
+          } catch {
+              throw err;
+          }
+      }
+      //sends roomlist out for usersidebar
+      socket.emit("refresh_list", roomlist);
+      console.log(roomlist);
 
     //fs.appendFile(filepath,"Room: " + data); // add room number to file
     console.log(`User with id: ${username} joined room: ${data}`);

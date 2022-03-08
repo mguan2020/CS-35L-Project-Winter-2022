@@ -12,6 +12,16 @@ function UserSidebar(){
     const [existsfriend, setExistsFriend] = useState(false);
     const [blankFriend, setBlankFriend] = useState(false);
     const [selfAdd, setSelfAdd] = useState(false);
+    const [userrooms, setuserrooms] = useState([]);
+    getSocket().on("refresh_list", (rooms) => {
+        const uniquerooms =[];
+        for (var i = 0; i < rooms.length-1; i++) {
+            if (!uniquerooms.includes(rooms[i])) {
+                uniquerooms.push(rooms[i]);
+            }
+        }
+        setuserrooms(uniquerooms);
+    });
     const [d,setd] = useState([
         {
             title: "Group",
@@ -89,14 +99,16 @@ function UserSidebar(){
         <div className="UserSidebar">
             <div className="Header"> Chat Rooms </div>
             <ul className="UserSidebarList">
-                {d.map((val, key) => {
+                {userrooms.map((val, key) => {
                     return (
                         <li key={key}
                             className = "chatroom"
-                            onClick={retrieveChat}>
+                            onClick={() => {
+                                getSocket().emit("display_chatroom", val);
+                            }}>
                             <div id="spacer"></div>
                             <div id="title">
-                                Room: {val.title}
+                                Room: {val}
                             </div>
                         </li>
                     );
