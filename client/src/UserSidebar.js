@@ -22,20 +22,6 @@ function UserSidebar(){
         }
         setuserrooms(uniquerooms);
     });
-    const [d,setd] = useState([
-        {
-            title: "Group",
-            link: "/Group",
-        },
-        {
-            title: "Friends",
-            link: "/Friends",
-        },
-        {
-            title: "Family",
-            link: "/Family",
-        }
-    ]);
    const [friend,setfriend] = useState([]);
 
     // when user logs out, sidebar will not display friends and chatrooms
@@ -104,7 +90,7 @@ function UserSidebar(){
                         <li key={key}
                             className = "chatroom"
                             onClick={() => {
-                                getSocket().emit("display_chatroom", val);
+                                getSocket().emit("display_chatroom1", val);
                             }}>
                             <div id="spacer"></div>
                             <div id="title">

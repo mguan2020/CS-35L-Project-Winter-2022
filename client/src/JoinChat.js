@@ -41,9 +41,11 @@ function JoinChat() {
     setShowChat(false);
     setShowProfile(true);
   });
-  socket.on("display_chatroom", (val) => {
-    setShowChat(true);
-    setRoom(val);
+  socket.on("display_chatroom2", (val) => {
+      setShowChat(true);
+      r = val;
+      setRoom(val);
+      socket.emit("get_data", getRoom());
   });
   socket.on("stop", () => {
     setLoggedIn(true);

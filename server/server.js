@@ -17,6 +17,8 @@ const server = http.createServer(app);
 let onlineUsers = [];
 var dict = {};
 
+
+
 const io = new Server(server, { // connect express to socket.io server
   cors: {
     origin: "http://localhost:3000", // this is where the app will be run
@@ -306,7 +308,7 @@ io.on("connection", (socket) => {
       });
 
     const sleep = promisify(setTimeout);
-    sleep(1000).then(()=>{
+    sleep(5).then(()=>{
       socket.emit("receive_data",list);
     });
    
@@ -355,38 +357,47 @@ io.on("connection", (socket) => {
     socket.join(data);
       let filepath = 'accounts/' + username + "\.txt";
 
-      
+
+      fs.appendFile("rooms/" + data + "\.txt", "", function (err) {
+          if (err) throw err;
+          console.log("Saved!");
+      });
       //array to keep track of the rooms a user is apart of
       let roomlist = [];
       //code to make list of rooms
       let roomfilepath = 'accounts/userrooms/' + username + '\.txt';
-      fs.appendFile(roomfilepath, data +'\n', function (err) {
+      fs.appendFile(roomfilepath, data + '\n', function (err) {
           if (err) throw err;
       });
+      const sleep = promisify(setTimeout);
+      sleep(50).then(() => {
+          if (fs.existsSync(roomfilepath)) {
+              try {
+                  const data = fs.readFileSync(roomfilepath, 'utf-8');
+                  const lines = data.split(/\r?\n/);
+                  lines.forEach((line) => {
+                      roomlist.push(line);
+                      console.log(`Added ${line} to ${username} room list`);
 
-
-      if (fs.existsSync(roomfilepath)) {
-          try {
-              const data = fs.readFileSync(roomfilepath, 'utf-8');
-
-              const lines = data.split(/\r?\n/);
-              lines.forEach((line) => {
-                  roomlist.push(line + "\n");
-                  console.log(`Added ${line} to ${username} room list`);
-
-              });
-          } catch {
-              throw err;
+                  });
+              } catch {
+                  throw err;
+              }
           }
-      }
-      //sends roomlist out for usersidebar
-      socket.emit("refresh_list", roomlist);
-      console.log(roomlist);
+          //sends roomlist out for usersidebar
+          socket.emit("refresh_list", roomlist);
 
-    //fs.appendFile(filepath,"Room: " + data); // add room number to file
-    console.log(`User with id: ${username} joined room: ${data}`);
+          console.log(roomlist);
+
+          //fs.appendFile(filepath,"Room: " + data); // add room number to file
+          console.log(`User with id: ${username} joined room: ${data}`);
+      });
+
   });
 
+    socket.on("display_chatroom1", (val) => {
+        socket.emit("display_chatroom2", (val));
+    });
   socket.on("send_message", (data) => { // listen for various events and respond
     console.log(data.room + "aaa");
     let content = data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')' + data.numLikes + ':liked by,]\n';
