@@ -175,6 +175,7 @@ socket.on("receive_data",(data)=>{
                   <div className="message-meta">
                     <p id="time">{messageContent.time}</p>
                     <p id="author">{messageContent.author}</p>
+                    <p id="time"></p>
                     <p id= "time"> Likes:{messageContent.numLikes}</p>
 
                  

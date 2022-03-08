@@ -92,6 +92,7 @@ io.on("connection", (socket) => {
   socket.on("add_friend", (user, friend)=>{
     let filepath = "accounts/"+ user +"\.txt";
     let friendpath = "accounts/"+ friend + "\.txt";
+    let fpath = "accounts/" + friend + "_followers\.txt";
     let exists = false;
     //checks if user is valid
     if(fs.existsSync(filepath)){
@@ -119,6 +120,11 @@ io.on("connection", (socket) => {
           if(err) throw err;
           console.log("Saved friend!");
           socket.emit("saved_friend");
+        });
+
+        fs.appendFile(fpath,user+"\n",function(err){
+            console.log("Followers updated");
+            
         });
       } else {
         socket.emit("invalid_friend");
@@ -169,13 +175,28 @@ io.on("connection", (socket) => {
 
     // Remove this user from everyone else's friends list
     fs.readdirSync("accounts/").forEach(file => {
-      fs.readFile("accounts/" + file, 'utf8', function(err, data) {
+      let userFilePath = "accounts/" + file;
+      fs.readFile(userFilePath, 'utf8', function(err, data) {
         let toRemove = user;
         let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
         let formatted = data.replace(re, '');
         formatted = formatted.replace(/\n{2,}/g, '\n');
       
-        fs.writeFile("accounts/" + file, formatted, 'utf8', function(err) {
+        fs.writeFile(userFilePath, formatted, 'utf8', function(err) {
+          if (err) return console.log(err);
+        });
+      });
+    });
+
+    // If user sent a message in the chat, 
+    // replace the sender with "deleted account"
+    fs.readdirSync("rooms/").forEach(file => {
+      let userFilePath = "rooms/" + file;
+      fs.readFile(userFilePath, 'utf8', function(err, data) {
+        let result = data.replace(new RegExp('by:' + user, 'g'), 'by:deleted account');
+      
+        // console.log(result);
+        fs.writeFile(userFilePath, result, 'utf8', function(err) {
           if (err) return console.log(err);
         });
       });
@@ -203,12 +224,31 @@ io.on("connection", (socket) => {
     socket.emit("friend_list", friend_list);
   });
 
+  socket.on("show_followers", (user) => {
+    socket.emit("profile_showing");
+    let filepath = 'accounts/' + user + "_followers\.txt";
+    let friend_list = []
+    
+    if(fs.existsSync(filepath)){
+      // console.log("valid username!");
+
+      const file = fs.readFileSync(filepath, 'UTF-8');
+
+      const lines = file.split(/\r?\n/);
+      for(let i = 0; i < lines.length-1; i++){
+        friend_list.push(lines[i] + "\n");
+      }
+    }
+    socket.emit("followers_list", friend_list);
+  });
+
   
   socket.on("send_like",(data,uname)=>{
 
     fs.readFile("rooms/" + data.room + "\.txt", {encoding: 'utf8'}, function (err,dat) {
-      
+      console.log(data.numLikes);
       let old = data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')' + (data.numLikes-1) + ':liked by,';
+      console.log(old);
       console.log(data.likedby[0]);
       console.log(data.likedby[1]);
 
@@ -220,6 +260,7 @@ io.on("connection", (socket) => {
       for(let i = 0; i < data.likedby.length; i++){
         ne += data.likedby[i] + " ";
       }
+      console.log(ne);
      ne += "]\n";
       var formatted = dat.replace(old, ne);
     fs.writeFile("rooms/" + data.room + "\.txt", formatted, 'utf8', function (err) {
@@ -255,7 +296,8 @@ io.on("connection", (socket) => {
           let l = line.substring(line.lastIndexOf(')')+1,line.lastIndexOf(':'));
           let start = line.lastIndexOf(",")+1;
           let end = line.lastIndexOf("]")-1;
-
+          console.log(start);
+          console.log(end);
           let q = (start > end) ? [] : line.substring(start,end).split(" ");
           console.log(q);
 
