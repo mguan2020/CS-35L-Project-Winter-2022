@@ -38,10 +38,13 @@ function JoinChat() {
     setShowChat(false);
     setShowProfile(true);
   });
+
+  socket.off("display_chatroom2");
   socket.on("display_chatroom2", (val) => {
       setShowChat(true);
       r = val;
       setRoom(val);
+      console.log("Retrieving info from " + getRoom());
       socket.emit("get_data", getRoom());
   });
   socket.on("stop", () => {
@@ -82,7 +85,7 @@ function JoinChat() {
       if (loggedIn !== false && room !== "") {
         addData(room);
         socket.emit("join_room", room,username); // send the user to a chatroom
-        
+         console.log("going into get_Data");
         setShowChat(true);
         socket.emit("get_data",getRoom());
       }

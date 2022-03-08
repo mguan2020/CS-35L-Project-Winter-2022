@@ -289,7 +289,8 @@ io.on("connection", (socket) => {
   });
      socket.to(data.room).emit("receive_like",data);
   });
-
+  
+  
   socket.on("get_data",(room)=>{
     console.log("Rec");
     
@@ -317,13 +318,14 @@ io.on("connection", (socket) => {
           console.log(end);
           let q = (start > end) ? [] : line.substring(start,end).split(" ");
           console.log(q);
-
+          
           let combined = {room: room, author: a, message: m, time: t, numLikes: parseInt(l),likedby:q};
           list.push(combined);
       });
-
+     
+      console.log("About to emit receive data");
     const sleep = promisify(setTimeout);
-    sleep(5).then(()=>{
+    sleep(100).then(()=>{
       socket.emit("receive_data",list);
     });
    
@@ -411,8 +413,11 @@ io.on("connection", (socket) => {
   });
 
     socket.on("display_chatroom1", (val) => {
-        socket.emit("display_chatroom2", (val));
+      console.log("in display chatroom 1");
+        socket.emit("display_chatroom2", val);
     });
+
+
   socket.on("send_message", (data) => { // listen for various events and respond
     console.log(data.room + "aaa");
     let content = data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')' + data.numLikes + ':liked by,]\n';

@@ -83,6 +83,8 @@ function Chat({ socket, username, room}) {
         }
       }
 });*/
+
+socket.off("receive_data");
 socket.on("receive_data",(data)=>{
     console.log("Y");
 
