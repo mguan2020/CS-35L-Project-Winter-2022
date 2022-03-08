@@ -425,6 +425,7 @@ io.on("connection", (socket) => {
       if(err) throw err;
       console.log("Saved!");
     });
+    console.log("Message sent to : " + data.room);
     socket.to(data.room).emit("receive_message", data);
   });
 
