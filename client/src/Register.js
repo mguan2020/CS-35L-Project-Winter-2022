@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import io from "socket.io-client";
 import {getSocket} from "./JoinChat";
 import "./Register.css";
 import Logout from "./Logout";
 
-var crypto = require('crypto');
-
-
-//const socket = io.connect("http://localhost:3001");
 
 let pass_username = "";
 
@@ -40,7 +35,7 @@ function Register() {
     }
 
     const regist = () => {
-        if (usernameReg != "" && passwordReg != "") {
+        if (usernameReg !== "" && passwordReg !== "") {
             getSocket().emit("register",
             usernameReg, 
             String(hash_pass(passwordReg)));
@@ -54,7 +49,7 @@ function Register() {
     };
 
     const login = () => {
-        if (usernameLog != "" && passwordLog != "") {
+        if (usernameLog !== "" && passwordLog !== "") {
             getSocket().emit("login",
             usernameLog, 
             String(hash_pass(passwordLog)));

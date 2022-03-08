@@ -1,6 +1,3 @@
-import io from "socket.io-client";
-import { useState } from "react";
-import Chat from "./Chat";
 import "./SearchResult.css";
 
 

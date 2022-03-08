@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Socket } from "socket.io-client";
-//import "./Logout.css"
+import React, { useState } from "react";
 import Register from "./Register";
 import {getSocket} from "./JoinChat";
 import "./Logout.css"

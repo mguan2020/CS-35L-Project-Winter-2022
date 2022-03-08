@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Socket } from "socket.io-client";
-import Register from "./Register";
+import React, { useState } from "react";
 import {getSocket} from "./JoinChat";
-import JoinChat from "./JoinChat";
 import "./UserProfile.css"
 
 
@@ -19,12 +16,12 @@ function UserProfile({username}){
 
     
 
-    if (fList.length == 0)
+    if (fList.length === 0)
     {
         setFList(["You aren't following anybody yet!"])
     }
 
-    if(followers.length == 0){
+    if(followers.length === 0){
         setfollowers(["No followers yet!"])
     }
 
