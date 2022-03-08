@@ -81,11 +81,6 @@ io.on("connection", (socket) => {
       if(err) throw err;
       console.log("Saved!");
       });
-
-      fs.appendFile(filepath + "_rooms","Rooms: " + "\n",function (err){
-      if(err) throw err;
-      console.log("Saved Room File!");
-      });
     }
   });
 
@@ -185,7 +180,7 @@ io.on("connection", (socket) => {
     }
 
     // Delete the user's room's file
-    let filepath2 = 'accounts/' + user + "_rooms" + "\.txt";
+    let filepath2 = 'userrooms/' + user + "\.txt";
     if(fs.existsSync(filepath2)){
       fs.unlinkSync(filepath2);
     }
@@ -357,6 +352,20 @@ io.on("connection", (socket) => {
           socket.emit("logged_in", user);
           onlineUsers.push(user);
           dict[socket.id] = user;
+
+          // Display chatrooms
+          let roomlist = [];
+          //code to make list of rooms
+          let roomfilepath = 'userrooms/' + user + '\.txt';
+          if (fs.existsSync(roomfilepath)) {
+            const data = fs.readFileSync(roomfilepath, 'utf-8');
+            const lines = data.split(/\r?\n/);
+            lines.forEach((line) => {
+                roomlist.push(line);
+            });
+            //sends roomlist out for usersidebar
+            socket.emit("refresh_list", roomlist);
+          }
         }
         else{
           console.log("invalid Password!");
@@ -382,7 +391,7 @@ io.on("connection", (socket) => {
       //array to keep track of the rooms a user is apart of
       let roomlist = [];
       //code to make list of rooms
-      let roomfilepath = 'accounts/userrooms/' + username + '\.txt';
+      let roomfilepath = 'userrooms/' + username + '\.txt';
       fs.appendFile(roomfilepath, data + '\n', function (err) {
           if (err) throw err;
       });
