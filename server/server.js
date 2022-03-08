@@ -221,8 +221,9 @@ io.on("connection", (socket) => {
   socket.on("send_like",(data,uname)=>{
 
     fs.readFile("rooms/" + data.room + "\.txt", {encoding: 'utf8'}, function (err,dat) {
-      
-      let old = data.message + "(posted by:" + data.author + " " + " (posted at time: " + data.time + ')' + (data.numLikes-1) + ':liked by,';
+      console.log(data.numLikes);
+      let old = data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')' + (data.numLikes-1) + ':liked by,';
+      console.log(old);
       console.log(data.likedby[0]);
       console.log(data.likedby[1]);
 
@@ -230,10 +231,11 @@ io.on("connection", (socket) => {
         old += data.likedby[i] + " ";
       }
       old += "]\n";
-      let ne = data.message + "(posted by:" + data.author + " " + " (posted at time: " + data.time + ')' + data.numLikes + ':liked by,';
+      let ne = data.message + "(posted by:" + data.author + " (posted at time: " + data.time + ')' + data.numLikes + ':liked by,';
       for(let i = 0; i < data.likedby.length; i++){
         ne += data.likedby[i] + " ";
       }
+      console.log(ne);
      ne += "]\n";
       var formatted = dat.replace(old, ne);
     fs.writeFile("rooms/" + data.room + "\.txt", formatted, 'utf8', function (err) {
@@ -269,7 +271,8 @@ io.on("connection", (socket) => {
           let l = line.substring(line.lastIndexOf(')')+1,line.lastIndexOf(':'));
           let start = line.lastIndexOf(",")+1;
           let end = line.lastIndexOf("]")-1;
-
+          console.log(start);
+          console.log(end);
           let q = (start > end) ? [] : line.substring(start,end).split(" ");
           console.log(q);
 
