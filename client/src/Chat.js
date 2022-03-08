@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
-import { Socket } from "socket.io-client";
+//import { Socket } from "socket.io-client";
 import "./Chat.css";
 import SearchResult from "./SearchResult";
 import {getRoom} from "./JoinChat";
 import JoinChat from "./JoinChat";
 import Heart from "react-animated-heart";
-import {rem} from "./JoinChat";
+//import {rem} from "./JoinChat";
 
 
-const fs = require('fs');
-const readline = require('readline');
+//const fs = require('fs');
+//const readline = require('readline');
 
 function Chat({ socket, username, room}) {
   const [currentMessage, setCurrentMessage] = useState(""); // the message to be sent
@@ -72,9 +72,6 @@ function Chat({ socket, username, room}) {
   }
 }
 
-function dis(){
-  
-}
 
 /*socket.on("receive_like",(data)=>{
       for(let i = 0; i < numLikes.length; i++){
@@ -161,7 +158,7 @@ socket.on("receive_data",(data)=>{
                   <div className="message-content">
                     <p>{messageContent.message}</p>
                     <Heart isClick={messageContent.numLikes > 0} onClick={()=>{
-                      if(username != messageContent.author && !messageContent.likedby.includes(username)){
+                      if(username !== messageContent.author && !messageContent.likedby.includes(username)){
                         let n = [...messageList];
                         n[i].numLikes++;
                         console.log(n[i].likedby);

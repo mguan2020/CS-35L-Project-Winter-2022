@@ -2,9 +2,6 @@ import "./Sidebar.css";
 import React from 'react';
 import {useState} from "react"
 import UserSidebar from "./UserSidebar"
-import {SidebarData} from './SidebarData'
-import {getSData} from "./SidebarData"
-import { Socket } from "socket.io-client";
 import {getSocket} from "./JoinChat"
 function Sidebar() {
     const [showSidebar, setShowSidebar] = useState(false);

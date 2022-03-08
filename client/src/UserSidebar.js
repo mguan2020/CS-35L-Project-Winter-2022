@@ -1,6 +1,6 @@
 import Sidebar from "./Sidebar";
 import "./UserSidebar.css"
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {getSocket} from "./JoinChat";
 import {passUser} from "./Register"
 
@@ -55,19 +55,19 @@ function UserSidebar(){
 
     // function to add friend
     const addFriend = () => {
-        if (friend_username != "" && passUser() != friend_username)
+        if (friend_username !== "" && passUser() !== friend_username)
         {
             getSocket().emit("add_friend", passUser(), friend_username);
             
             // getSocket().emit("show_friends", passUser());
         }
-        else if (friend_username == "") {
+        else if (friend_username === "") {
             setBlankFriend(true);
             setFailFriend(false);
             setSavedFriend(false);
             setSelfAdd(false);
         }
-        else if (friend_username == passUser()) {
+        else if (friend_username === passUser()) {
             setBlankFriend(false);
             setFailFriend(false);
             setSavedFriend(false);

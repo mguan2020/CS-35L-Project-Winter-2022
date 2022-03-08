@@ -1,14 +1,11 @@
 import "./JoinChat.css";
 import io from "socket.io-client";
-import {Socket} from "socket.io-client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Chat from "./Chat";
-import Register from "./Register"
 import {passUser} from "./Register"
 import {addData} from "./SidebarData";
 import UserProfile from "./UserProfile";
 const socket = io.connect("http://localhost:3001"); // connect our frontend with backend
-const x = 1;
 let username = "aa";
  var r = "aaa";
 
@@ -77,12 +74,12 @@ function JoinChat() {
   });
 
   const joinRoom = () => {
-    if (room != "") {
+    if (room !== "") {
       username = passUser();
       console.log("joinROOM! -> Username: " + username);
       console.log("joinROOM! -> Room: " + room);
       r = room;
-      if (loggedIn != false && room !== "") {
+      if (loggedIn !== false && room !== "") {
         addData(room);
         socket.emit("join_room", room,username); // send the user to a chatroom
         
@@ -96,11 +93,11 @@ function JoinChat() {
   };
 
   let errmsg = "";
-  if(room == "")
+  if(room === "")
   {
     errmsg = "Enter a room name";
   }
-  if(username == "")
+  if(username === "")
   {
     errmsg = "Log in to join a room!";
   }
