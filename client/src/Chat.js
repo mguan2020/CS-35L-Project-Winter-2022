@@ -101,7 +101,10 @@ socket.on("receive_data",(data)=>{
   useEffect(() => {
     socket.on("receive_message", (data) => {
       console.log("aaa");
-      setMessageList((list) => [...list, data]);
+      if(data.room === getRoom()){
+        setMessageList((list) => [...list, data]);
+      }
+      
      // setnumLikes((list) => [...list, 0]);
     });
 

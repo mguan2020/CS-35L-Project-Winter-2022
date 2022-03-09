@@ -22,15 +22,18 @@ function UserProfile({username}){
 
     if (fList.length === 0)
     {
-        setFList(["You aren't following anybody yet!"])
+        setFList(["You aren't following anybody yet!"]);
     }
 
     if(followers.length === 0){
-        setfollowers(["No followers yet!"])
+        setfollowers(["No followers yet!"]);
     }
 
     const deleteAccount = () => {
-        getSocket().emit("delete_account", username)
+        localStorage.removeItem('age'+username);
+        localStorage.removeItem('email'+username);
+        localStorage.removeItem('aboutme'+username);
+        getSocket().emit("delete_account", username);
     }
 
     return (
