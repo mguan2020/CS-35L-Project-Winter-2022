@@ -111,8 +111,8 @@ function UserSidebar(){
             {failfriend && <p style={{color:"red"}}>Invalid Friend</p>}
             {blankFriend && <p style={{color:"red"}}>Must Enter Friend</p>}
             {selfAdd && <p style={{color:"red"}}>Can't add yourself!</p>}
-            {savedfriend && <p style={{color:"green"}}>Friend request sent or accepted!</p>}
-            {existsfriend && <p>Friend already exists!</p>}
+            {savedfriend && <p style={{color:"green"}}>Friend request sent! <br></br> (or accepted if they <br></br> already requested you!)</p>}
+            {existsfriend && <p>Friend already exists <br></br> or request already sent!</p>}
 
 
             <ul className="SidebarList">

@@ -108,9 +108,9 @@ function JoinChat() {
   if(!(loggedIn)) {
     return (<div className="JoinChat">
     <h3>{deleted && <p style={{color:"red"}}>Account Deleted</p>}
-    Welcome to our chat app. <br/>
-      Sign in to view chatrooms and friends! Then check your user profile on the right sidebar for
-      any pending friend requests.</h3>
+    <img src = "https://i.imgur.com/bLnZ2JY.png"
+      height = "200" width = "600" />
+      </h3>
     </div>);
   }
 

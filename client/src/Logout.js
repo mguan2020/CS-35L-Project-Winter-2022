@@ -30,11 +30,14 @@ function Logout({socket, username}){
         return ((!display) ? (<Register/>) :
         <div className="Logout">
             <div className="logoutContainer">
+                <br></br>
+                <img src = "https://i.imgur.com/bLnZ2JY.png"
+      height = "100" width = "300" />
                 <h3>Signed In</h3>
                 <p>Username: {username}</p>
                 <button onClick={showUserProfile}>Show My Profile</button>
                 <br></br>
-                <button onClick={()=>{setdisplay(false); getSocket().emit("log_out", (username));}}>Logout</button>
+                <span class="redLogOut" onClick={()=>{setdisplay(false); getSocket().emit("log_out", (username));}}>Log Out</span>
             </div>
         </div>
         );
@@ -42,11 +45,14 @@ function Logout({socket, username}){
         return ((!display) ? (<Register/>) :
         <div className="Logout">
             <div className="logoutContainer">
+                <br></br>
+                <img src = "https://i.imgur.com/bLnZ2JY.png"
+      height = "100" width = "300" />
                 <h3>Signed In</h3>
                 <p>Username: {username}</p>
                 <button onClick={returnHome}>Return Home</button>
                 <br></br>
-                <button onClick={()=>{setdisplay(false); getSocket().emit("log_out", (username));}}>Logout</button>
+                <span class="redLogOut" onClick={()=>{setdisplay(false); getSocket().emit("log_out", (username));}}>Log Out</span>
             </div>
         </div>
         );
