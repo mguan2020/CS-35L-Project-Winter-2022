@@ -40,3 +40,20 @@
 .UserProfile button:hover {
     background: #2e7d32;
 }
+
+.redButton {
+    width: 195px;
+    height: 28px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 16px;
+    background: #d84f4f;
+    color: white;
+    cursor: pointer;
+}
+
+.redButton:hover {
+    background: #e60404;
+}

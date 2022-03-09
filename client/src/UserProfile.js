@@ -129,11 +129,16 @@ function UserProfile({username}){
               <p style={{color:"red"}}>Pending Friend Request from: {pen}</p>
               <button onClick={()=>{
                   getSocket().emit("add_friend", passUser(), pen);
-              }}>Add Friend {pen}</button>
+              }}>Accept</button>
+              <button onClick={()=>{
+                  getSocket().emit("decline_friend", passUser(), pen);
+              }}>Decline</button>
               </>
             );
           })}
-                <button onClick={deleteAccount}>Delete Account</button>
+          <br></br>
+          <br></br>
+                <span class="redButton" onClick={deleteAccount}>Delete Account</span>
           
 
             </div>

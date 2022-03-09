@@ -20,6 +20,8 @@
     height: auto;
     padding: 0;
     width: 100%;
+    align-items: center;
+    text-align: center;
 }
 
 .UserSidebarList .chatroom{

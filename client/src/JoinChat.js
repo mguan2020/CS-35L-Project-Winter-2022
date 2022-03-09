@@ -131,7 +131,7 @@ function JoinChat() {
   else{
     return ( <div className="JoinChat">
       <div className="joinChatContainer">
-          <h3>Join A Chat</h3>
+          <h3>Join a Chat</h3>
           <input
             type="text"
             placeholder="Room ID..."

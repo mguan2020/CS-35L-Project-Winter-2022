@@ -103,7 +103,7 @@ io.on("connection", (socket) => {
   socket.on("add_friend", (user, friend)=>{
     let filepath = "accounts/"+ user +"\.txt";
     let friendpath = "accounts/"+ friend.trim() + "\.txt";
-    let fpath = "accounts/" + friend.trim() + "_followers\.txt";
+    let fpath = "friendrequests/" + friend.trim() + "\.txt";
     let exists = false;
     console.log("User:" + user);
     console.log("Friend: " + friend);
@@ -150,6 +150,20 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("decline_friend", (user, friend)=>{
+    let userFilePath = "friendrequests/" + user + "\.txt";
+      fs.readFile(userFilePath, 'utf8', function(err, data) {
+        let toRemove = friend;
+        let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
+        let formatted = data.replace(re, '');
+        formatted = formatted.replace(/\n{2,}/g, '\n');
+      
+        fs.writeFile(userFilePath, formatted, 'utf8', function(err) {
+          if (err) return console.log(err);
+        });
+      });
+    });
+
   // Code to stop logged_in components from displaying
   socket.on("stop_chat",()=>{
       socket.emit("stop");
@@ -189,9 +203,30 @@ io.on("connection", (socket) => {
       fs.unlinkSync(filepath2);
     }
 
+    // Delete the user's friend file (if exists)
+    let filepath3 = 'friendrequests/' + user + "\.txt";
+    if(fs.existsSync(filepath3)){
+      fs.unlinkSync(filepath3);
+    }
+
     // Remove this user from everyone else's friends list
     fs.readdirSync("accounts/").forEach(file => {
       let userFilePath = "accounts/" + file;
+      fs.readFile(userFilePath, 'utf8', function(err, data) {
+        let toRemove = user;
+        let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
+        let formatted = data.replace(re, '');
+        formatted = formatted.replace(/\n{2,}/g, '\n');
+      
+        fs.writeFile(userFilePath, formatted, 'utf8', function(err) {
+          if (err) return console.log(err);
+        });
+      });
+    });
+
+    // Remove this user from everyone else's friends requests
+    fs.readdirSync("friendrequests/").forEach(file => {
+      let userFilePath = "friendrequests/" + file;
       fs.readFile(userFilePath, 'utf8', function(err, data) {
         let toRemove = user;
         let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
@@ -242,7 +277,7 @@ io.on("connection", (socket) => {
 
   socket.on("show_followers", (user) => {
     socket.emit("profile_showing");
-    let filepath = 'accounts/' + user + "_followers\.txt";
+    let filepath = 'friendrequests/' + user + "\.txt";
     let friend_list = []
     
     if(fs.existsSync(filepath)){
@@ -252,7 +287,9 @@ io.on("connection", (socket) => {
 
       const lines = file.split(/\r?\n/);
       for(let i = 0; i < lines.length-1; i++){
-        friend_list.push(lines[i] + "\n");
+        if (lines[i] != "") {
+          friend_list.push(lines[i] + "\n");
+        }
       }
     }
     socket.emit("followers_list", friend_list);
