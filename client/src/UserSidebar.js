@@ -101,7 +101,7 @@ function UserSidebar(){
                 })}
             </ul>
             <br></br>
-            <div className="Header">Followers</div>
+            <div className="Header">Be a friend with someone</div>
             <input type="text" placeholder="Username" value={friend_username}
                         onChange={(e) => {
                             setFriendUsername(e.target.value);
@@ -111,7 +111,10 @@ function UserSidebar(){
             {failfriend && <p style={{color:"red"}}>Invalid Friend</p>}
             {blankFriend && <p style={{color:"red"}}>Must Enter Friend</p>}
             {selfAdd && <p style={{color:"red"}}>Can't add yourself!</p>}
-            {savedfriend && <p style={{color:"green"}}>Friend added!</p>}
+            {savedfriend && <p style={{color:"green"}}>Success! If you are responding to 
+            someone's friend request, you two are now friends! Otherwise, you are starting
+            a friend request. The person who you made 
+            the request to will receive a notification of a friend request in their profile.</p>}
             {existsfriend && <p>Friend already exists!</p>}
 
 

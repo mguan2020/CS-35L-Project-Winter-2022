@@ -102,9 +102,12 @@ io.on("connection", (socket) => {
   // simply appends to end of file
   socket.on("add_friend", (user, friend)=>{
     let filepath = "accounts/"+ user +"\.txt";
-    let friendpath = "accounts/"+ friend + "\.txt";
-    let fpath = "accounts/" + friend + "_followers\.txt";
+    let friendpath = "accounts/"+ friend.trim() + "\.txt";
+    let fpath = "accounts/" + friend.trim() + "_followers\.txt";
     let exists = false;
+    console.log("User:" + user);
+    console.log("Friend: " + friend);
+    console.log(friendpath);
     //checks if user is valid
     if(fs.existsSync(filepath)){
       //checks if friend is already added to friends list
@@ -121,7 +124,8 @@ io.on("connection", (socket) => {
       } catch {
         throw err;
       }
-      
+      console.log(friendpath);
+      console.log(fs.existsSync(friendpath));
       //checks if friend is valid
       if (exists) {
         socket.emit("exists_friend");
