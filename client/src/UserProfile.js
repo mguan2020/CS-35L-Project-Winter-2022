@@ -1,32 +1,62 @@
 import React, { useState } from "react";
 import {getSocket} from "./JoinChat";
+import {passUser} from "./Register";
 import "./UserProfile.css"
 import "./Chat.css";
+import { Socket } from "socket.io-client";
 
 
 function UserProfile({username}){
     const [fList, setFList] = useState([]); 
     const [followers,setfollowers] = useState([]);
+    const [friendList,setfriendList] = useState([]);
     const [age,setage] = useState("");
     const [aboutme,setaboutme] = useState("");
     const [email,setemail] = useState("");
+
+    const[pending,setpending] = useState([]);
     getSocket().on("friend_list",(friend_list)=>{
         setFList(friend_list)
+        
     });
 
+    getSocket().off("followers_list");
     getSocket().on("followers_list",(friend_list)=>{
         setfollowers(friend_list)
+        console.log("In followers_list");
+        for(let i = 0; i < friend_list.length; i++){
+            if(fList.includes(friend_list[i]) && !friendList.includes(friend_list[i])){
+                    console.log("Entered into later");
+                    console.log(friend_list[i]);
+                    setfriendList((list) => [...list, friend_list[i]]);
+               
+              
+            }
+            else if(!fList.includes(friend_list[i]) && !friendList.includes(friend_list[i])){
+                console.log("Follow pending");
+                setpending((list) => [...list, friend_list[i]]);
+            }
+        }
+        
     });
+
+
+     
+    
 
     
 
     if (fList.length === 0)
     {
-        setFList(["You aren't following anybody yet!"]);
+        //setFList(["You aren't following anybody yet!"]);
     }
 
     if(followers.length === 0){
-        setfollowers(["No followers yet!"]);
+        //setfollowers(["No followers yet!"]);
+    }
+
+    if(friendList.length == 0){
+        
     }
 
     const deleteAccount = () => {
@@ -84,15 +114,28 @@ function UserProfile({username}){
                       }}
                   />
                 </p>
-                <p>Following:
-                <h3>{fList}</h3>
+                <p>Friends:
+                <h3>{friendList.length == 0 ? ["No friends to show"]: friendList}</h3>
                 </p>
                 <br></br>
-                <p>You are being followed by:
-                <h3>{followers}</h3>
-                </p>
+
+
                 <br></br>
+             
+                 
+                {pending.map((pen) => {
+            return (
+                <>
+              <p style={{color:"red"}}>Pending Friend Request from: {pen}</p>
+              <button onClick={()=>{
+                  getSocket().emit("add_friend", passUser(), pen);
+              }}>Add Friend {pen}</button>
+              </>
+            );
+          })}
                 <button onClick={deleteAccount}>Delete Account</button>
+          
+
             </div>
         </div>
     );
