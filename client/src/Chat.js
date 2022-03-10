@@ -100,7 +100,6 @@ socket.on("receive_data",(data)=>{
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      console.log("aaa");
       if(data.room === getRoom()){
         setMessageList((list) => [...list, data]);
       }
@@ -161,7 +160,7 @@ socket.on("receive_data",(data)=>{
               > 
                 <div>
                   <div className="message-content">
-                    <p>{messageContent.message}</p>
+                    <p>{messageContent.message} </p>
                     <Heart isClick={messageContent.numLikes > 0} onClick={()=>{
                       if(username !== messageContent.author && !messageContent.likedby.includes(username)){
                         let n = [...messageList];
@@ -204,8 +203,8 @@ socket.on("receive_data",(data)=>{
         <button onClick={sendMessage}>Send</button>
       </div>
 
-      <br></br>
-      <span class="redButton" onClick={leaveRoom}>Leave Room</span>
+      <br></br><br></br>
+      <span class="blueButton" onClick={leaveRoom}>Leave Room</span>
       
       <SearchResult list={messageR} term={finalSearchTerm} search={isSearching}/>
     </div>

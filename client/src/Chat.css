@@ -29,8 +29,15 @@
     background: #263238;
 }
 .search-bar .bar{
-    margin-top: 10px;
+  width: 180px;
+  height: 20px;
+  margin: 1px;
+  border: 2px solid #43a047;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 16px;
 }
+
 .chat-header p {
   display: block;
   padding: 0 1em 0 2em;
@@ -67,8 +74,8 @@
   height: auto;
   min-height: 40px;
   max-width: 250px;
-  background-color: green;
-  border-radius: 5px;
+  background-color: rgb(15, 71, 145);
+  border-radius: 33px;
   color: white;
   display: flex;
   align-items: center;
@@ -81,30 +88,30 @@
 }
 
 #you {
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 #you .message-content {
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 #you .message-meta {
-  justify-content: flex-start;
-  margin-left: 5px;
+  justify-content: flex-end;
+  margin-right: 5px;
 }
 
 #other {
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 #other .message-content {
-  justify-content: flex-end;
-  background-color: darkblue;
+  justify-content: flex-start;
+  background-color: rgb(173, 173, 173);
 }
 
 #other .message-meta {
-  justify-content: flex-end;
-  margin-right: 5px;
+  justify-content: flex-start;
+  margin-left: 5px;
 }
 
 .message-meta #author {
@@ -150,7 +157,7 @@
 }
 
 .chat-window .chat-footer button:hover {
-  color: #43a047;
+  color: #0514df;
 }
 .hide {
   opacity: 0 !important;
@@ -159,19 +166,19 @@
     background: green;
 }
 
-.redButton {
+.blueButton {
   width: 195px;
   height: 28px;
   margin: 5px;
   border: none;
-  border-radius: 5px;
-  padding: 5px;
+  border-radius: 12px;
+  padding: 17px;
   font-size: 16px;
-  background: #d84f4f;
+  background: #5b94df;
   color: white;
   cursor: pointer;
 }
 
-.redButton:hover {
-  background: #e60404;
+.blueButton:hover {
+  background: #4976b1;
 }

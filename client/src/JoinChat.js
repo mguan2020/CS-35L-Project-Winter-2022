@@ -131,17 +131,18 @@ function JoinChat() {
   else{
     return ( <div className="JoinChat">
       <div className="joinChatContainer">
-          <h3>Join a Chat</h3>
+          <h3>Join a Chat Room</h3>
+          <br></br>
           <input
             type="text"
-            placeholder="Room ID..."
+            placeholder="Room Name"
             onChange={(event) => {
               setRoom(event.target.value);
               r = event.target.value;
             }}
           />
           <br></br>
-          <button onClick={joinRoom}>Join A Room </button>
+          <button onClick={joinRoom}>Join</button>
           {blankChat && <p style={{color:"red"}}>Room ID cannot be blank</p>}
           {/* <button onClick={updateValues}>Update Username </button> */}
            </div>

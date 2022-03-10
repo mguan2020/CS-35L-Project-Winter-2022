@@ -24,7 +24,6 @@ function Logout({socket, username}){
         setdisplay(false);
     })
 
-
     // Sets Logout display, otherwise goes to Register display
     if (!profileShown){
         return ((!display) ? (<Register/>) :

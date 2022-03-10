@@ -17,10 +17,13 @@
 }
 
 .i-circle {
-    background: #80ecba;
+    background: #80e5ec;
     color: #fff;
-    padding: 5px 20px;
+    padding: 9px 24px;
     border-radius: 50%;
+    border: solid;
+    border-color: #66b7bd;
+    border-width: 2px;
     font-size: 35px;
 }
 
@@ -41,13 +44,25 @@
     background: #2e7d32;
 }
 
-.redButton {
-    width: 195px;
-    height: 28px;
-    margin: 5px;
-    border: none;
+.UserProfile input {
+    width: 180px;
+    height: 20px;
+    margin: 1px;
+    border: 2px solid #5b94df;
     border-radius: 5px;
     padding: 5px;
+    font-size: 16px;
+}
+
+.redButton {
+    width: 195px;
+    height: 50px;
+    margin: 5px;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    padding-left: 30px;
+    padding-right: 30px;
     font-size: 16px;
     background: #d84f4f;
     color: white;

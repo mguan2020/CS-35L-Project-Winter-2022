@@ -14,7 +14,7 @@ body {
     width: 180px;
     height: 20px;
     margin: 1px;
-    border: 2px solid #43a047;
+    border: 2px solid #5b94df;
     border-radius: 5px;
     padding: 5px;
     font-size: 16px;
@@ -25,16 +25,16 @@ body {
     height: 28px;
     margin: 5px;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
     padding: 5px;
     font-size: 16px;
-    background: #43a047;
+    background: #5b94df;
     color: white;
     cursor: pointer;
 }
 
 .registration button:hover {
-    background: #2e7d32;
+    background: #4873ac;
 }
 .login {
     display: flex;
@@ -45,7 +45,7 @@ body {
     width: 180px;
     height: 20px;
     margin: 1px;
-    border: 2px solid #43a047;
+    border: 2px solid #5b94df;
     border-radius: 5px;
     padding: 5px;
     font-size: 16px;
@@ -56,15 +56,15 @@ body {
     height: 28px;
     margin: 5px;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
     padding: 5px;
     font-size: 16px;
-    background: #43a047;
+    background: #5b94df;
     color: white;
     cursor: pointer;
 }
 .login button:hover {
-    background: #2e7d32;
+    background: #4873ac;
 }
 .loginmsg {
     margin: 0;

@@ -72,7 +72,7 @@ function UserProfile({username}){
                 <span class="i-circle">{username.charAt(0)}</span>
                 <h3>{username}'s Profile</h3>
 
-                <p>Age:
+                <p>{"Age: "}<br></br>
                 <input
                       className="bar"
                       type="text"
@@ -87,7 +87,7 @@ function UserProfile({username}){
 
                 </p>
                 <br></br>
-                <p>Email:
+                <p>{"Email: "}<br></br>
                 <input
                       className="bar"
                       type="text"
@@ -102,7 +102,7 @@ function UserProfile({username}){
             
                 <br></br>
 
-                <p>AboutMe:
+                <p>{"About Me: "}<br></br>
                 <input
                       className="bar"
                       type="text"

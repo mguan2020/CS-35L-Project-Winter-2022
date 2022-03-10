@@ -20,7 +20,7 @@ Instructions to run app:
     cd CS-35L-PROJECT-WINTER-2022
     cd client
 ```
-4. Run the following commands to install the modules and deploy the app:
+4. Run the following commands to install the dependencies and deploy the app:
 ```
     npm install
     npm update

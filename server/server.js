@@ -454,8 +454,6 @@ io.on("connection", (socket) => {
           //sends roomlist out for usersidebar
           socket.emit("refresh_list", roomlist);
 
-          console.log(roomlist);
-
           //fs.appendFile(filepath,"Room: " + data); // add room number to file
           console.log(`User with id: ${username} joined room: ${data}`);
       });

@@ -25,28 +25,30 @@ body {
 
 .logoutContainer button {
     width: 195px;
-    height: 30px;
+    height: 35px;
     margin: 1px;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
     padding: 5px;
     font-size: 16px;
-    background: #43a047;
+    background: #5b94df;
     color: #fff;
     cursor: pointer;
 }
 
 .logoutContainer button:hover {
-    background: #2e7d32;
+    background: #4b78b3;
 }
 
 .redLogOut {
-    width: 195px;
-    height: 28px;
+    width: 100px;
+    height: 25px;
     margin: 1px;
     border: none;
-    border-radius: 5px;
-    padding: 1px;
+    border-radius: 12px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
     font-size: 16px;
     background: #d84f4f;
     color: rgb(255, 255, 255);

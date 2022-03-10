@@ -21,6 +21,7 @@
     padding: 0;
     width: 100%;
     align-items: center;
+    background-color: rgb(163, 200, 235);
     /* text-align: center; */
 }
 
@@ -35,7 +36,7 @@
 }
 
 .UserSidebarList .chatroom:hover{
-    background-color: white;
+    background-color: rgb(96, 152, 204);
     cursor: pointer;
 }
 .chatroom #spacer {
@@ -51,7 +52,7 @@
 width: 180px;
 height: 20px;
 margin: 1px;
-border: 2px solid #43a047;
+border: 2px solid #5b94df;
 border-radius: 5px;
 padding: 8px;
 font-size: 16px;
@@ -62,10 +63,10 @@ font-size: 16px;
     height: 28px;
     margin: 5px;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
     padding: 5px;
     font-size: 16px;
-    background: #43a047;
+    background: #5b94df;
     color: white;
     cursor: pointer;
 }
