@@ -18,7 +18,7 @@ Instructions to run app:
 3. Then, open a new command line window, and navigate into the client directory:
 ```
     cd CS-35L-PROJECT-WINTER-2022
-    cd server
+    cd client
 ```
 4. Run the following commands to install the modules and deploy the app:
 ```
