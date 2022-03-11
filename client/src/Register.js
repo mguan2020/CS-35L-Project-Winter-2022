@@ -121,7 +121,7 @@ function Register() {
                             setPasswordReg(e.target.value);
                         }}
                     />
-                    <button onClick={regist}>Register</button>
+                    <button disabled={successreg} style={{opacity:(successreg?0.4:1)}} onClick={regist}>Register</button>
                     {blankinput && <p style={{color:"red"}}>Must enter username/password</p>}
                     {failregister && <p style={{color:"red"}}>Username already exists!</p>}
                     {successreg && <p style={{color:"green"}}>Account registered!</p>}
