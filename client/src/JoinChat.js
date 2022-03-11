@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import { useState } from "react";
 import Chat from "./Chat";
 import {passUser} from "./Register"
-// import {addData} from "./SidebarData";
+import {addData} from "./SidebarData";
 import UserProfile from "./UserProfile";
 const socket = io.connect("http://localhost:3001"); // connect our frontend with backend
 let username = "aa";
@@ -55,7 +55,7 @@ function JoinChat() {
 
   socket.on("return_home", () => {
     setShowProfile(false);
-    // setShowChat(false);
+    setShowChat(false);
   });
 
   socket.on("logged_in", (user) => {
@@ -83,7 +83,7 @@ function JoinChat() {
       console.log("joinROOM! -> Room: " + room);
       r = room;
       if (loggedIn !== false && room !== "") {
-        // addData(room);
+        addData(room);
         socket.emit("join_room", room,username); // send the user to a chatroom
          console.log("going into get_Data");
         setShowChat(true);
@@ -95,22 +95,21 @@ function JoinChat() {
     }
   };
 
-  // let errmsg = "";
-  // if(room === "")
-  // {
-  //   errmsg = "Enter a room name";
-  // }
-  // if(username === "")
-  // {
-  //   errmsg = "Log in to join a room!";
-  // }
+  let errmsg = "";
+  if(room === "")
+  {
+    errmsg = "Enter a room name";
+  }
+  if(username === "")
+  {
+    errmsg = "Log in to join a room!";
+  }
 
   if(!(loggedIn)) {
     return (<div className="JoinChat">
     <h3>{deleted && <p style={{color:"red"}}>Account Deleted</p>}
     <img src = "https://i.imgur.com/bLnZ2JY.png"
-      height = "200" width = "600"
-      alt = "" />
+      height = "200" width = "600" />
       </h3>
     </div>);
   }

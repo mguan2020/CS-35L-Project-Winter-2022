@@ -5,12 +5,12 @@ import UserSidebar from "./UserSidebar"
 import {getSocket} from "./JoinChat"
 function Sidebar() {
     const [showSidebar, setShowSidebar] = useState(false);
-    // let username = "";
+    let username = "";
     
     // check if user is logged in
     getSocket().on("logged_in", (arg)=>{
         setShowSidebar(true);
-        // username = arg;
+        username = arg;
     });
 
     getSocket().on("logged_out", ()=>{

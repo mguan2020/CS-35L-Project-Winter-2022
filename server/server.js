@@ -173,8 +173,7 @@ io.on("connection", (socket) => {
     if (onlineUsers.indexOf(user) != -1){
       onlineUsers.splice(onlineUsers.indexOf(user), 1);
       sockid = socket.id
-      delete dict[sockid];
-      console.log(dict);
+      delete dict.sockid;
     }
     socket.emit("logged_out");
   });
@@ -183,18 +182,13 @@ io.on("connection", (socket) => {
     socket.emit("return_home");
   });
 
-  // socket.on("refresh_friends1", () =>{
-  //   socket.emit("refresh_friends2");
-  // });
-
   // DELETE ACCOUNT IMPLEMENTATION
   socket.on("delete_account",(user)=>{
     // Remove the user from onlineUsers
     if (onlineUsers.indexOf(user) != -1){
       onlineUsers.splice(onlineUsers.indexOf(user), 1);
       sockid = socket.id
-      delete dict[sockid];
-      console.log(dict);
+      delete dict.sockid;
     }
 
     // Delete the user's .txt file
@@ -219,23 +213,12 @@ io.on("connection", (socket) => {
     fs.readdirSync("accounts/").forEach(file => {
       let userFilePath = "accounts/" + file;
       fs.readFile(userFilePath, 'utf8', function(err, data) {
-        // let toRemove = user;
-        // let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
-        // let formatted = data.replace(re, '');
-        // formatted = formatted.replace(/\n{2,}/g, '\n');
-
-        const file = fs.readFileSync(userFilePath, 'UTF-8');
-
-        const lines = file.split("\n");
-        console.log(lines[0]);
-        for(let i = 2; i < lines.length-1; i++){
-          if (lines[i] === user) {
-            lines[i] = "";
-          }
-        }
-        var newtext = lines.join('\n');
+        let toRemove = user;
+        let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
+        let formatted = data.replace(re, '');
+        formatted = formatted.replace(/\n{2,}/g, '\n');
       
-        fs.writeFile(userFilePath, newtext, 'utf8', function(err) {
+        fs.writeFile(userFilePath, formatted, 'utf8', function(err) {
           if (err) return console.log(err);
         });
       });
@@ -245,18 +228,12 @@ io.on("connection", (socket) => {
     fs.readdirSync("friendrequests/").forEach(file => {
       let userFilePath = "friendrequests/" + file;
       fs.readFile(userFilePath, 'utf8', function(err, data) {
-        const file = fs.readFileSync(userFilePath, 'UTF-8');
-
-        const lines = file.split("\n");
-        console.log(lines[0]);
-        for(let i = 0; i < lines.length-1; i++){
-          if (lines[i] === user) {
-            lines[i] = "";
-          }
-        }
-        var newtext = lines.join('\n');
+        let toRemove = user;
+        let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
+        let formatted = data.replace(re, '');
+        formatted = formatted.replace(/\n{2,}/g, '\n');
       
-        fs.writeFile(userFilePath, newtext, 'utf8', function(err) {
+        fs.writeFile(userFilePath, formatted, 'utf8', function(err) {
           if (err) return console.log(err);
         });
       });
@@ -416,7 +393,6 @@ io.on("connection", (socket) => {
           socket.emit("logged_in", user);
           onlineUsers.push(user);
           dict[socket.id] = user;
-          console.log(dict);
 
           // Display chatrooms
           let roomlist = [];
@@ -469,7 +445,6 @@ io.on("connection", (socket) => {
                   lines.forEach((line) => {
                       roomlist.push(line);
                       console.log(`Added ${line} to ${username} room list`);
-                      socket.emit("success_join");
 
                   });
               } catch {
@@ -485,10 +460,10 @@ io.on("connection", (socket) => {
 
   });
 
-  socket.on("display_chatroom1", (val) => {
-    console.log("in display chatroom 1");
-      socket.emit("display_chatroom2", val);
-  });
+    socket.on("display_chatroom1", (val) => {
+      console.log("in display chatroom 1");
+        socket.emit("display_chatroom2", val);
+    });
 
 
   socket.on("send_message", (data) => { // listen for various events and respond
@@ -542,8 +517,7 @@ io.on("connection", (socket) => {
     // Retrive username, remove user from dict
     user = dict[socket.id]
     sockid = socket.id
-    delete dict[sockid];
-    console.log(dict);
+    delete dict.sockid;
 
 
     // Remove user from onlineUsers

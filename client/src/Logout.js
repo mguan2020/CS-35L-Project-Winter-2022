@@ -24,11 +24,6 @@ function Logout({socket, username}){
         setdisplay(false);
     })
 
-    getSocket().on("return_home", () =>{
-        setProfileShown(false);
-        setdisplay(true);
-    });
-
     // Sets Logout display, otherwise goes to Register display
     if (!profileShown){
         return ((!display) ? (<Register/>) :
@@ -36,7 +31,7 @@ function Logout({socket, username}){
             <div className="logoutContainer">
                 <br></br>
                 <img src = "https://i.imgur.com/bLnZ2JY.png"
-      height = "100" width = "300" alt = "" />
+      height = "100" width = "300" />
                 <h3>Signed In</h3>
                 <p>Username: {username}</p>
                 <button onClick={showUserProfile}>Show My Profile</button>
@@ -51,7 +46,7 @@ function Logout({socket, username}){
             <div className="logoutContainer">
                 <br></br>
                 <img src = "https://i.imgur.com/bLnZ2JY.png"
-      height = "100" width = "300" alt = "" />
+      height = "100" width = "300" />
                 <h3>Signed In</h3>
                 <p>Username: {username}</p>
                 <button onClick={returnHome}>Return Home</button>
