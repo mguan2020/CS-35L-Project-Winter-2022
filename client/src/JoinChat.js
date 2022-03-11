@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import { useState } from "react";
 import Chat from "./Chat";
 import {passUser} from "./Register"
-import {addData} from "./SidebarData";
+// import {addData} from "./SidebarData";
 import UserProfile from "./UserProfile";
 const socket = io.connect("http://localhost:3001"); // connect our frontend with backend
 let username = "aa";
@@ -83,7 +83,7 @@ function JoinChat() {
       console.log("joinROOM! -> Room: " + room);
       r = room;
       if (loggedIn !== false && room !== "") {
-        addData(room);
+        // addData(room);
         socket.emit("join_room", room,username); // send the user to a chatroom
          console.log("going into get_Data");
         setShowChat(true);
