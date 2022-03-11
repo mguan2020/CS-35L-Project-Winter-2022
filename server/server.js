@@ -193,7 +193,8 @@ io.on("connection", (socket) => {
     if (onlineUsers.indexOf(user) != -1){
       onlineUsers.splice(onlineUsers.indexOf(user), 1);
       sockid = socket.id
-      delete dict.sockid;
+      delete dict[sockid];
+      console.log(dict);
     }
 
     // Delete the user's .txt file
@@ -218,12 +219,23 @@ io.on("connection", (socket) => {
     fs.readdirSync("accounts/").forEach(file => {
       let userFilePath = "accounts/" + file;
       fs.readFile(userFilePath, 'utf8', function(err, data) {
-        let toRemove = user;
-        let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
-        let formatted = data.replace(re, '');
-        formatted = formatted.replace(/\n{2,}/g, '\n');
+        // let toRemove = user;
+        // let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
+        // let formatted = data.replace(re, '');
+        // formatted = formatted.replace(/\n{2,}/g, '\n');
+
+        const file = fs.readFileSync(userFilePath, 'UTF-8');
+
+        const lines = file.split("\n");
+        console.log(lines[0]);
+        for(let i = 2; i < lines.length-1; i++){
+          if (lines[i] === user) {
+            lines[i] = "";
+          }
+        }
+        var newtext = lines.join('\n');
       
-        fs.writeFile(userFilePath, formatted, 'utf8', function(err) {
+        fs.writeFile(userFilePath, newtext, 'utf8', function(err) {
           if (err) return console.log(err);
         });
       });
@@ -233,12 +245,18 @@ io.on("connection", (socket) => {
     fs.readdirSync("friendrequests/").forEach(file => {
       let userFilePath = "friendrequests/" + file;
       fs.readFile(userFilePath, 'utf8', function(err, data) {
-        let toRemove = user;
-        let re = new RegExp('^.*' + toRemove + '.*$', 'gm');
-        let formatted = data.replace(re, '');
-        formatted = formatted.replace(/\n{2,}/g, '\n');
+        const file = fs.readFileSync(userFilePath, 'UTF-8');
+
+        const lines = file.split("\n");
+        console.log(lines[0]);
+        for(let i = 0; i < lines.length-1; i++){
+          if (lines[i] === user) {
+            lines[i] = "";
+          }
+        }
+        var newtext = lines.join('\n');
       
-        fs.writeFile(userFilePath, formatted, 'utf8', function(err) {
+        fs.writeFile(userFilePath, newtext, 'utf8', function(err) {
           if (err) return console.log(err);
         });
       });
@@ -524,7 +542,8 @@ io.on("connection", (socket) => {
     // Retrive username, remove user from dict
     user = dict[socket.id]
     sockid = socket.id
-    delete dict.sockid;
+    delete dict[sockid];
+    console.log(dict);
 
 
     // Remove user from onlineUsers
