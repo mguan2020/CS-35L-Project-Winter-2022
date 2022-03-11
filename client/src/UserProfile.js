@@ -15,26 +15,36 @@ function UserProfile({username}){
     const [email,setemail] = useState("");
 
     const[pending,setpending] = useState([]);
+    const [op,setop] = useState([]);
+
+    const [d,setd] = useState([]);
     getSocket().on("friend_list",(friend_list)=>{
-        setFList(friend_list)
+        setFList([...new Set(friend_list)]);
         
     });
 
     getSocket().off("followers_list");
     getSocket().on("followers_list",(friend_list)=>{
-        setfollowers(friend_list)
+        let friend_listb = [...new Set(friend_list)];
+        setfollowers(friend_listb)
         console.log("In followers_list");
-        for(let i = 0; i < friend_list.length; i++){
-            if(fList.includes(friend_list[i]) && !friendList.includes(friend_list[i])){
+        for(let i = 0; i < friend_listb.length; i++){
+            if(fList.includes(friend_listb[i]) && !friendList.includes(friend_listb[i])){
                     console.log("Entered into later");
-                    console.log(friend_list[i]);
-                    setfriendList((list) => [...list, friend_list[i]]);
+                    console.log(friend_listb[i]);
+                    if(!friendList.includes(friend_listb[i])){
+                        setfriendList((list) => [...list, friend_listb[i]]);
+                    }
+                    
+
                
               
             }
-            else if(!fList.includes(friend_list[i]) && !friendList.includes(friend_list[i])){
+            else if(!fList.includes(friend_listb[i]) && !friendList.includes(friend_listb[i])){
                 console.log("Follow pending");
-                setpending((list) => [...list, friend_list[i]]);
+                setpending((list) => [...list, friend_listb[i]]);
+                setd((list)=>[...list,false]);
+                setop((list)=>[...list,1.0]);
             }
         }
         
@@ -123,15 +133,28 @@ function UserProfile({username}){
                 <br></br>
              
                  
-                {pending.map((pen) => {
+                {pending.map((pen,i) => {
             return (
                 <>
               <p style={{color:"red"}}>Pending Friend Request from: {pen}</p>
-              <button onClick={()=>{
+              <button disabled={d[i]} style={{opacity: op[i]}} onClick={()=>{
                   getSocket().emit("add_friend", passUser(), pen);
+                  let nd = [...d];
+                  nd[i] = true;
+                  setd(nd);
+                  let np = [...op];
+                  np[i] = 0.2;
+                  setop(np);
+
               }}>Accept</button>
-              <button onClick={()=>{
+              <button disabled={d[i]} style={{opacity: op[i]}} onClick={()=>{
                   getSocket().emit("decline_friend", passUser(), pen);
+                  let nd = [...d];
+                  nd[i] = true;
+                  setd(nd);
+                  let np = [...op];
+                  np[i] = 0.2;
+                  setop(np);
               }}>Decline</button>
               </>
             );
