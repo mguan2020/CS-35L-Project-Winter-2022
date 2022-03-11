@@ -1,3 +1,2 @@
-friends
 class
 family
