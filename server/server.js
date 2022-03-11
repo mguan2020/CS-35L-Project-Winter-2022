@@ -173,7 +173,8 @@ io.on("connection", (socket) => {
     if (onlineUsers.indexOf(user) != -1){
       onlineUsers.splice(onlineUsers.indexOf(user), 1);
       sockid = socket.id
-      delete dict.sockid;
+      delete dict[sockid];
+      console.log(dict);
     }
     socket.emit("logged_out");
   });
@@ -181,6 +182,10 @@ io.on("connection", (socket) => {
   socket.on("stop_profile",()=>{
     socket.emit("return_home");
   });
+
+  // socket.on("refresh_friends1", () =>{
+  //   socket.emit("refresh_friends2");
+  // });
 
   // DELETE ACCOUNT IMPLEMENTATION
   socket.on("delete_account",(user)=>{
@@ -393,6 +398,7 @@ io.on("connection", (socket) => {
           socket.emit("logged_in", user);
           onlineUsers.push(user);
           dict[socket.id] = user;
+          console.log(dict);
 
           // Display chatrooms
           let roomlist = [];
@@ -445,6 +451,7 @@ io.on("connection", (socket) => {
                   lines.forEach((line) => {
                       roomlist.push(line);
                       console.log(`Added ${line} to ${username} room list`);
+                      socket.emit("success_join");
 
                   });
               } catch {
@@ -460,10 +467,10 @@ io.on("connection", (socket) => {
 
   });
 
-    socket.on("display_chatroom1", (val) => {
-      console.log("in display chatroom 1");
-        socket.emit("display_chatroom2", val);
-    });
+  socket.on("display_chatroom1", (val) => {
+    console.log("in display chatroom 1");
+      socket.emit("display_chatroom2", val);
+  });
 
 
   socket.on("send_message", (data) => { // listen for various events and respond

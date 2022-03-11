@@ -3,16 +3,16 @@ import {getSocket} from "./JoinChat";
 import {passUser} from "./Register";
 import "./UserProfile.css"
 import "./Chat.css";
-import { Socket } from "socket.io-client";
+// import { Socket } from "socket.io-client";
 
 
 function UserProfile({username}){
     const [fList, setFList] = useState([]); 
-    const [followers,setfollowers] = useState([]);
+    // const [followers,setfollowers] = useState([]);
     const [friendList,setfriendList] = useState([]);
-    const [age,setage] = useState("");
-    const [aboutme,setaboutme] = useState("");
-    const [email,setemail] = useState("");
+    // const [age,setage] = useState("");
+    // const [aboutme,setaboutme] = useState("");
+    // const [email,setemail] = useState("");
 
     const[pending,setpending] = useState([]);
     const [op,setop] = useState([]);
@@ -26,7 +26,7 @@ function UserProfile({username}){
     getSocket().off("followers_list");
     getSocket().on("followers_list",(friend_list)=>{
         let friend_listb = [...new Set(friend_list)];
-        setfollowers(friend_listb)
+        // setfollowers(friend_listb)
         console.log("In followers_list");
         for(let i = 0; i < friend_listb.length; i++){
             if(fList.includes(friend_listb[i]) && !friendList.includes(friend_listb[i])){
@@ -50,24 +50,18 @@ function UserProfile({username}){
         
     });
 
+    // if (fList.length === 0)
+    // {
+    //     //setFList(["You aren't following anybody yet!"]);
+    // }
 
-     
-    
+    // if(followers.length === 0){
+    //     //setfollowers(["No followers yet!"]);
+    // }
 
-    
-
-    if (fList.length === 0)
-    {
-        //setFList(["You aren't following anybody yet!"]);
-    }
-
-    if(followers.length === 0){
-        //setfollowers(["No followers yet!"]);
-    }
-
-    if(friendList.length == 0){
+    // if(friendList.length === 0){
         
-    }
+    // }
 
     const deleteAccount = () => {
         localStorage.removeItem('age'+username);
@@ -75,6 +69,10 @@ function UserProfile({username}){
         localStorage.removeItem('aboutme'+username);
         getSocket().emit("delete_account", username);
     }
+
+    // const refreshFriends = () => {
+    //     getSocket().emit("refresh_friends1");
+    // };
 
     return (
         <div className="Profile">
@@ -89,7 +87,7 @@ function UserProfile({username}){
                       value={localStorage.getItem('age'+username)}
                       placeholder="Enter age..."
                       onChange={(event) => {
-                          setage(event.target.value);
+                        //   setage(event.target.value);
                           localStorage.setItem('age' + username,event.target.value);
                       }}
                   />
@@ -104,7 +102,7 @@ function UserProfile({username}){
                       value={localStorage.getItem('email'+username)}
                       placeholder="Enter email address..."
                       onChange={(event) => {
-                          setemail(event.target.value);
+                        //   setemail(event.target.value);
                           localStorage.setItem('email' + username,event.target.value);
                       }}
                   />
@@ -119,13 +117,14 @@ function UserProfile({username}){
                       value={localStorage.getItem('aboutme'+username)}
                       placeholder="Tell us about yourself..."
                       onChange={(event) => {
-                          setaboutme(event.target.value);
+                        //   setaboutme(event.target.value);
                           localStorage.setItem('aboutme'+username,event.target.value);
                       }}
                   />
                 </p>
                 <p>Friends:
-                <h3>{friendList.length == 0 ? ["No friends to show"]: friendList}</h3>
+                {/* <span class="redButton" onClick={refreshFriends}>Refresh Friends</span> */}
+                <h3>{friendList.length === 0 ? ["No friends to show"]: friendList}</h3>
                 </p>
                 <br></br>
 

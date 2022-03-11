@@ -22,7 +22,7 @@ function UserSidebar(){
         }
         setuserrooms(uniquerooms);
     });
-   const [friend,setfriend] = useState([]);
+//    const [friend,setfriend] = useState([]);
 
     // when user logs out, sidebar will not display friends and chatrooms
     getSocket().on("logged_out", ()=>{
@@ -76,9 +76,9 @@ function UserSidebar(){
     };
 
     // function to see chatrooms you are part of
-    const retrieveChat = () => {
-        getSocket().emit("join_room", passUser());
-    }
+    // const retrieveChat = () => {
+    //     getSocket().emit("join_room", passUser());
+    // }
 
     // Sets Logout display, otherwise goes to Sidebar display
     return ((!display) ? (<Sidebar/>) :
@@ -91,6 +91,7 @@ function UserSidebar(){
                             className = "chatroom"
                             onClick={() => {
                                 getSocket().emit("display_chatroom1", val);
+                                getSocket().emit("stop_profile");
                             }}>
                             <div id="spacer"></div>
                             <div id="title">
@@ -115,7 +116,7 @@ function UserSidebar(){
             {existsfriend && <p>Friend already exists <br></br> or request already sent!</p>}
 
 
-            <ul className="SidebarList">
+            {/* <ul className="SidebarList">
                 {friend.map((val, key) => {
                     return (
                         <li key={key}
@@ -130,7 +131,7 @@ function UserSidebar(){
                         </li>
                     );
                 })}
-            </ul>
+            </ul> */}
         </div>
     );
 }

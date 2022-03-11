@@ -55,7 +55,7 @@ function JoinChat() {
 
   socket.on("return_home", () => {
     setShowProfile(false);
-    setShowChat(false);
+    // setShowChat(false);
   });
 
   socket.on("logged_in", (user) => {
@@ -95,21 +95,22 @@ function JoinChat() {
     }
   };
 
-  let errmsg = "";
-  if(room === "")
-  {
-    errmsg = "Enter a room name";
-  }
-  if(username === "")
-  {
-    errmsg = "Log in to join a room!";
-  }
+  // let errmsg = "";
+  // if(room === "")
+  // {
+  //   errmsg = "Enter a room name";
+  // }
+  // if(username === "")
+  // {
+  //   errmsg = "Log in to join a room!";
+  // }
 
   if(!(loggedIn)) {
     return (<div className="JoinChat">
     <h3>{deleted && <p style={{color:"red"}}>Account Deleted</p>}
     <img src = "https://i.imgur.com/bLnZ2JY.png"
-      height = "200" width = "600" />
+      height = "200" width = "600"
+      alt = "" />
       </h3>
     </div>);
   }

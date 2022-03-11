@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {getSocket} from "./JoinChat";
 import "./Register.css";
 import Logout from "./Logout";
-import { fstat } from "fs";
+// import { fstat } from "fs";
 
 
 let pass_username = "";
@@ -26,7 +26,7 @@ function Register() {
     const [successreg, setsuccessreg] = useState(false);
     const [successlogin, setsuccesslogin] = useState(false);
     const [privateKey, setPrivateKey] = useState("");
-    const [publicKey, setPublicKey] = useState("");
+    // const [publicKey, setPublicKey] = useState("");
 
     const hash_pass = (pass) => {
         const crypto = require("crypto");
@@ -47,7 +47,7 @@ function Register() {
                 getSocket().on("save_public", (public_key, private_key) => {
                     console.log("Save public key code here.");
                     setPrivateKey(private_key);
-                    setPublicKey(public_key);
+                    // setPublicKey(public_key);
                 });
             })
         }
@@ -124,7 +124,8 @@ function Register() {
                     <button onClick={regist}>Register</button>
                     {blankinput && <p style={{color:"red"}}>Must enter username/password</p>}
                     {failregister && <p style={{color:"red"}}>Username already exists!</p>}
-                    {successreg && <p style={{color:"green"}}>Account registered!<br/>Save your private key!<br/>{privateKey}</p>}
+                    {successreg && <p style={{color:"green"}}>Account registered!</p>}
+                    {/* {successreg && <p style={{color:"green"}}>Account registered!<br/>Save your private key!<br/>{privateKey}</p>} */}
                 </div>
                 <div className="login">
                     <h1>Login</h1>
